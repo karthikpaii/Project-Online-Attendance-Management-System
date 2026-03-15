@@ -1,0 +1,394 @@
+<!---sign.php and signup.php--->
+<!--fORM-->
+<!-- <?php session_start(); ?>  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form  </title>
+    <style>
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+   
+    text-decoration: none;
+}
+
+body {
+    background: #0f2027;  
+    background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.navbar {
+    background-color: #111;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 15px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo a {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+}
+
+li a {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 20px;
+    transition: color 0.3s ease;
+}
+
+li a:hover {
+    color: #f7b733;
+    text-decoration: underline;
+}
+
+.container {
+    background: url('signup.jpg') center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height: 100vh;
+    padding: 100px;
+    padding-top:50px;
+}
+
+.wrapper {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 35px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
+h2 {
+    text-align: center;
+    color: #f7b733;
+    margin-bottom: 25px;
+}
+
+.input_box {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 10px;
+   
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #f7b733;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #f7b733;
+    color: #000;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #ffcc33;
+}
+
+.error-message,
+.success-message {
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+    padding-left: 3px;
+}
+
+.error-message {
+    color: #ff4b5c;
+}
+
+.success-message {
+    color: #4cd137;
+}
+
+.login-account {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+}
+
+.login-account a {
+    color: #f7b733;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-account a:hover {
+    text-decoration: underline;
+}
+
+.adminbox {
+    color: yellowgreen;
+    font: 1em sans-serif;
+    background:black;
+}
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <div class="navdiv">
+        <div class="logo"><a href="#">Online Attendance Recorder</a></div>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about1.html">About</a></li>
+            <li><a href="privacy1.html">Privacy Policy</a></li>
+            <li><a href="logi.php">Login</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="wrapper">
+        <form action="signup.php" method="post" id="signupForm">
+            <h2>Sign Up Now</h2>
+
+            <div class="input_box">
+                <select name="role" class="adminbox" id="roleSelect" required>
+                    <option value="student" selected>Student</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div id="collegeCodeBox" class="input_box" style="display:none;">
+                <input type="text" name="college_code" id="collegeCodeInput" placeholder="Enter College Code">
+            </div>
+
+            <div class="input_box">
+                <input type="text" id="fName" name="first_name" placeholder="Name" required>
+            </div>
+
+            <div class="input_box">
+                <input type="email" id="emailF" name="email" placeholder="Email Address" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="input_box">
+                <input type="password" id="passF" name="password" placeholder="Password" required>
+                <span class="error-message"></span>
+            </div>
+
+            <div class="input_box">
+                <input type="text" id="bdate" name="bdate" placeholder="Enter Correct Birth Date" onfocus="(this.type='date')" required>
+                <span class="error-message"></span>
+            </div>
+
+            <button type="submit" id="submit">Submit</button><br><br>
+
+            <div class="login-account">
+                <b>Already have an account?</b>
+                <a href="logi.php"><b> Login Now</b></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const roleSelect = document.getElementById('roleSelect');//selecting html by id
+    const collegeCodeBox = document.getElementById('collegeCodeBox');
+    const signupForm = document.getElementById('signupForm');
+    const bdateField = document.getElementById("bdate");
+    const bdateError = bdateField.parentElement.querySelector(".error-message");
+
+    roleSelect.addEventListener('change', function() {
+        if (this.value === 'admin') { // this refers to roleselect
+            collegeCodeBox.style.display = 'block';//shows college code
+        } else {
+            collegeCodeBox.style.display = 'none';// hides
+        }
+    });
+
+    signupForm.addEventListener('submit', function(e) {
+        if (roleSelect.value === 'admin') {// if admin then get college code
+            const collegeCodeInput = document.getElementById('collegeCodeInput').value.trim();
+            if (collegeCodeInput !== '123456') {
+                e.preventDefault();// stops the default action 
+                alert('Invalid College Code. Please enter the correct code.');
+            }
+        }
+    });
+
+    //another js
+    
+        const form = document.querySelector("form"),
+            emailField = document.getElementById("emailF"),
+            passwordField = document.getElementById("passF"),
+            emailError = emailField.parentElement.querySelector(".error-message"),
+            passwordError = passwordField.parentElement.querySelector(".error-message");
+
+        form.onsubmit = (e) => {
+            let valid = true;
+
+            // Validate email field
+            if (emailField.value.trim() === "") {
+                showError(emailError, "Email can't be blank");
+                valid = false;
+            } else if (!isValidEmail(emailField.value)) {
+                showError(emailError, "Enter a valid email address");
+                valid = false;
+            } else {
+                hideError(emailError);
+            }
+
+            // Validate password field
+            if (passwordField.value.trim() === "") {
+                showError(passwordError, "Password can't be blank");
+                valid = false;
+            } else if (passwordField.value.length < 6) {
+                showError(passwordError, "Password must be at least 6 characters");
+                valid = false;
+            } else {
+                hideError(passwordError);
+            }
+
+            // If validation fails, prevent form submission
+            if (!valid) {
+                e.preventDefault();
+            }
+        };
+
+        // Real-time validation
+        emailField.addEventListener("keyup", () => validateField(emailField, emailError, isValidEmail, "Enter a valid email address"));
+        passwordField.addEventListener("keyup", () => validateField(passwordField, passwordError, (val) => val.length >= 6, "Password must be at least 6 characters"));
+
+        function validateField(input, errorElement, validationFn, errorMessage) {
+            if (input.value.trim() === "") {
+                showError(errorElement, input.name.charAt(0).toUpperCase() + input.name.slice(1) + " can't be blank");/* input.name.charAt(0).toUpperCase() capitalizes the first letter of the input name (like email). input.name.slice(1) gets the rest of the string.
+            , Combining these gives  a capitalized version of the input field's name. " can't be blank" adds the error message. (ex:email cant be blank or password...*/
+            } else if (!validationFn(input.value)) {
+                showError(errorElement, errorMessage);
+            } else {
+                hideError(errorElement);
+            }
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = "block";
+        }
+
+        function hideError(element) {
+            element.textContent = "";
+            element.style.display = "none";
+        }
+
+        function isValidEmail(email) {
+            return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
+        }
+
+        form.onsubmit = (e) => {
+    let valid = true;
+
+
+    // Birth date validation
+    if (!bdateField.value) {
+        showError(bdateError, "Birth date is required");
+        valid = false;
+    } else {
+        const inputParts = bdateField.value.split("-");
+        const year = parseInt(inputParts[0], 10);
+        const month = parseInt(inputParts[1], 10);
+        const day = parseInt(inputParts[2], 10);
+
+        if (isNaN(year) || isNaN(month) || isNaN(day)) {
+            showError(bdateError, "Invalid date format");
+            valid = false;
+        } else if (year > 2025) {
+            showError(bdateError, "Year cannot be greater than 2025");
+            valid = false;
+        } else if (month > 12 || month < 1) {
+            showError(bdateError, "Month must be between 1 and 12");
+            valid = false;
+        } else if (day < 1 || day > new Date(year, month, 0).getDate()) {
+            showError(bdateError, "Invalid day for selected month");
+            valid = false;
+        } else {
+            hideError(bdateError);
+        }
+    }
+
+    if (!valid) {
+        e.preventDefault();
+    }
+};
+
+// Run validation on blur/change after user interaction
+bdateField.addEventListener("blur", () => {
+    if (!bdateField.value) {
+        showError(bdateError, "Birth date is required");
+        return;
+    }
+
+    const inputParts = bdateField.value.split("-");
+    const year = parseInt(inputParts[0], 10);
+    const month = parseInt(inputParts[1], 10);
+    const day = parseInt(inputParts[2], 10);
+
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+        showError(bdateError, "Invalid date format");
+    } else if (year > 2025) {
+        showError(bdateError, "Year cannot be greater than 2025");
+    } else if (month > 12 || month < 1) {
+        showError(bdateError, "Month must be between 1 and 12");
+    } else if (day < 1 || day > new Date(year, month, 0).getDate()) {
+        showError(bdateError, "Invalid day for selected month");
+    } else {
+        hideError(bdateError);
+    }
+});
+
+    </script>
+</body>
+</html>
