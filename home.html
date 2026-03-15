@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Online Attendace Recorder</title>
+<link href="styles.css" rel="stylesheet" ></link >
+</head>
+<body>
+<!--Navigation Bar-->
+<nav class="navbar">
+<div class="navdiv">
+<div class="logo"><a href="#">Online Attendace Recorder</a></div>
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="about1.html">About</a></li>
+<li><a href="privacy1.html">Privacy Policy</a></li>
+<li><a href="logi.php">Login</a></li>
+</ul>
+</div>
+</nav>
+  
+<!--Middle Section-->
+<section class="mid">
+<div class="tex">
+<h1>Online Attendace Recorder</h1>
+<p> Manage Attendace Records Easily and Efficiently</p>
+<a href="sign.php"> <button class="btn">Get Started</button></a>
+</div>
+
+</section>
+
+<!---Feature Section -->
+<section class="features">
+    <h2 class="feature-title"> Features</h2>
+        <div class="feature-container">
+            <!--First Box-->
+            <div class="feature-box">
+                <h3>📌Easy Attendance</h3>
+                <p>Mark Attendance with Single Click</p>
+            </div>
+
+             <!--Second Box-->
+             <div class="feature-box">
+                <h3>🔒 Secure Data</h3>
+                <p>Secure Your Data</p>
+            </div>
+
+             <!--Third Box-->
+             <!--Third Box-->
+             <div class="feature-box">
+                <h3>👤 User Friendly Interface</h3>
+                <p>Easy To Understand Interface</p>
+            </div>
+
+            <!--Fourth Box-->
+            <div class="feature-box">
+                <h3>📊 Attendace Report</h3>
+                <p>Track Students Attendance</p>
+            </div>
+
+            <!--Fifth Box-->
+            <div class="feature-box">
+                <h3>📩 Send Message</h3>
+                <p>Send Messages To Absent Students Parents</p>
+            </div>
+        </div>
+</section>
+
+
+<!--How it works-->
+<section class="howitworks">
+   <h2 class="howittitle">How It Works</h2>
+   <div class="how-container">
+      <div class="box">
+        <h3>SignUp/Login</h3>
+        <p>Create an account or Login</p>
+      </div>
+
+      <div class="box">
+        <h3>Create Batch </h3>
+        <p>Create New Batch and Class</p>
+      </div>
+
+      <div class="box">
+        <h3>Mark Attendace</h3>
+        <p>Select names and Mark Attendace</p>
+      </div>
+
+      <div class="box">
+        <h3>View Attendace</h3>
+        <p>View All Attendance/ Edit Records</p>
+      </div>
+
+      <div class="box">
+        <h3>Send Messages</h3>
+        <p>Send Message to Absentees Parents</p>
+      </div>
+   </div>
+
+   <script>
+    // //selects all the HTML elements with the class box &  boxes → This is the full list of boxes
+    document.querySelectorAll('.box').forEach((box,index,boxes) => {
+        box.addEventListener('mouseover' , () => {
+            boxes.forEach((b,i) => {  //b represents the current box & i is index
+                let className= i < index ? 'prev' : i === index ? 'hovered' : 'next'; /*If the current box's index  is less than the hovered box's index (index), then className = 'prev'.
+                Else if (i === index) it is the same box that is hovered, then className = 'hovered'.Otherwise, if the index is greater, className = 'next'.*/
+                b.classList.remove("prev","next","hovered");//clear existing
+                b.classList.add(className);
+            })
+        })
+        box.addEventListener('mouseleave',()=>{
+            boxes.forEach((b)=>b.classList.remove ("prev","next","hovered"));
+        })
+    })
+    </script>
+</section>
+
+<!--Footer-->
+<footer>
+    <p>📧 Contact:attendance@support.com</p>
+    <p>© 2025 Online Attendance Recorder. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
