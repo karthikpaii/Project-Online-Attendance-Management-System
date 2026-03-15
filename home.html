@@ -9,15 +9,15 @@
 <body>
 <!--Navigation Bar-->
 <nav class="navbar">
-<div class="navdiv">
-<div class="logo"><a href="#">Online Attendace Recorder</a></div>
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="about1.html">About</a></li>
-<li><a href="privacy1.html">Privacy Policy</a></li>
-<li><a href="logi.php">Login</a></li>
-</ul>
-</div>
+    <div class="navdiv">
+        <div class="logo"><a href="#">Online Attendace Recorder</a></div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="about1.html">About</a></li>
+            <li><a href="privacy1.html">Privacy Policy</a></li>
+            <li><a href="logi.php">Login</a></li>
+        </ul>
+    </div>
 </nav>
   
 <!--Middle Section-->
@@ -97,23 +97,6 @@
         <p>Send Message to Absentees Parents</p>
       </div>
    </div>
-
-   <script>
-    // //selects all the HTML elements with the class box &  boxes → This is the full list of boxes
-    document.querySelectorAll('.box').forEach((box,index,boxes) => {
-        box.addEventListener('mouseover' , () => {
-            boxes.forEach((b,i) => {  //b represents the current box & i is index
-                let className= i < index ? 'prev' : i === index ? 'hovered' : 'next'; /*If the current box's index  is less than the hovered box's index (index), then className = 'prev'.
-                Else if (i === index) it is the same box that is hovered, then className = 'hovered'.Otherwise, if the index is greater, className = 'next'.*/
-                b.classList.remove("prev","next","hovered");//clear existing
-                b.classList.add(className);
-            })
-        })
-        box.addEventListener('mouseleave',()=>{
-            boxes.forEach((b)=>b.classList.remove ("prev","next","hovered"));
-        })
-    })
-    </script>
 </section>
 
 <!--Footer-->

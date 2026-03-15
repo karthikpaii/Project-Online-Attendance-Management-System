@@ -16,7 +16,6 @@
         background-color:#f4f4f4; ;
         color: white;
         text-align: center;
-      
         margin: 0;
         padding: 0;
     }
@@ -159,7 +158,7 @@
     
     .mai {
     text-align: center;
-    padding: 120px;
+    padding: 60px 20px;
     font-size: 20px;
     color: white;
     border-top: 2px solid white;
@@ -170,7 +169,7 @@
     
     .main {
     text-align: center;
-    padding: 90px;
+    padding: 60px 20px;
     font-size: 20px;
     color: white;
     background: black;
@@ -195,12 +194,13 @@
       
     }
     
-    .feature-container
-    {
+  .feature-container
+{
     display: flex;
     justify-content: center;
     gap: 20px;
-    }
+    
+}
     
     .feature-box
     {
@@ -244,12 +244,15 @@
     
     .how-container
     {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform-style: preserve-3d;
-        gap: 10px;
+      
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    gap: 10px;
+    flex-wrap: wrap;   
+    
        
     }
 .box {
@@ -302,39 +305,35 @@ footer
   }
 }
 
-@media (max-width: 480px) {
-  .navdiv a {
-    font-size: 8px;
-  }
-  .logo a
-  {
-    font-size: 14px;
-  }
 
-  .feature-box{
-     width: 100px;
-      
-  }
+@media (max-width:768px){
 
-  .box1
-  {
-    display: none;
-  }
+.navdiv{
+flex-direction: column;
+gap: 10px;
 }
 
+li{
+display: block;
+margin: 10px 0;
+}
 
-@media (max-width: 1024px) {
-  .navdiv a {
-    font-size: 14px;
-  }
+}
 
-  .logo a
-  {
-    font-size: 14px;
-  }
+@media (max-width:768px){
 
-  .box1
-  {
-    display: none;
-  }
+.feature-container{
+flex-direction: column;
+align-items:center;
+}
+
+.how-container{
+flex-direction: column;
+}
+
+.box{
+width:90%;
+max-width:200px;
+}
+
 }
