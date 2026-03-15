@@ -1,4 +1,4 @@
-/* style for home.html*/
+
 *{
     text-decoration: none;
     }
@@ -280,4 +280,61 @@ footer
     padding: 20px;
     font-size: 14px;
     font-family: monospace;
+}
+
+@media (max-width: 768px) {
+  .navdiv a {
+    font-size: 14px;
+  }
+  .logo a
+  {
+    font-size: 14px;
+  }
+
+  .feature-box{
+     width: 100px;
+     
+  }
+
+  .box1
+  {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navdiv a {
+    font-size: 8px;
+  }
+  .logo a
+  {
+    font-size: 14px;
+  }
+
+  .feature-box{
+     width: 100px;
+      
+  }
+
+  .box1
+  {
+    display: none;
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .navdiv a {
+    font-size: 14px;
+  }
+
+  .logo a
+  {
+    font-size: 14px;
+  }
+
+  .box1
+  {
+    display: none;
+  }
 }
