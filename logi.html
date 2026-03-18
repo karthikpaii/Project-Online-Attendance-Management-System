@@ -1,0 +1,392 @@
+<!-- <?php session_start(); ?> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+    <style>
+* {
+    text-decoration: none;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: cursive;
+}
+
+.navbar {
+    background:  #121125;
+    font-family: cursive;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 10px;
+   
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo a {
+    font-size: 35px;
+    font-weight: 500;
+    color: white;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+}
+
+li a {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 25px;
+}
+
+li a:hover {
+    color: red;
+   
+}
+
+.mid {
+    margin-top: 1px;
+    display: grid;
+    height: 100%;
+    place-items: center;
+    background: #121125;
+}
+
+.wrapper {
+    border-radius: 17px;
+    text-align: center;
+    padding: 10px 40px;
+    box-shadow: 0px 5px 20px 10px rgba(0, 0, 0, 0.2);
+    padding-right:80px;
+    color: #fff;
+   
+}
+
+.wrapper h2 {
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.wrapper form {
+    margin: 20px 0;
+}
+
+input.field.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%,
+    100% {
+        margin-left: 0;
+    }
+
+    20%,
+    80% {
+        margin-left: -12px;
+    }
+
+    40%,
+    60% {
+        margin-left: 12px;
+    }
+}
+
+form .field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+form .field .input-area {
+    position: relative;
+    width: 100%; /* Ensure the input area takes the full width */
+}
+
+form input {
+    position: relative;
+    outline: none;
+    border: 0;
+    color: #fff;
+    padding: 12px 15px;
+    font-size: 16px;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 1px solid #34495e;
+    border-bottom-width: 2px;
+    overflow: hidden;
+}
+
+form .input-form {
+    padding-left: 45px;
+    font-size: 15px;
+}
+
+form input::placeholder {
+    color: #bfbfbf;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+form .field i {
+    position: absolute;
+    top: 50%;
+    font-size: 16px;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+form .field .icon {
+    left: 15px;
+    color: #bfbfbf;
+}
+
+input:is(:focus) {
+    border: 2px solid transparent;
+    background: linear-gradient(#121125, #121125) padding-box,
+        linear-gradient(45deg, blue, red) border-box;
+    border-radius: 5px;
+    transition: all 0.1s ease;
+}
+
+form .field .error-icon {
+    right: 15px;
+    color: #dc3545;
+}
+
+form .field .error-txt {
+    color: #dc3545;
+    font-size: 12px;
+    text-align: left;
+    margin-top: 10px;
+}
+
+form .field .error {
+    display: none;
+}
+
+form .field.error .error {
+    display: block;
+}
+
+form .pass-link {
+    text-align: right;
+    margin-top: -10px;
+    font-size: 12px;
+}
+
+.wrapper a {
+    color: #a4a6a8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.wrapper a:hover {
+    text-decoration: underline;
+}
+
+form input[type="submit"] {
+    border: 0;
+    outline: none;
+    margin-top: 30px;
+    background: linear-gradient(45deg, blue, red);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    width: 100%; /* Ensure the submit button takes the full width */
+    border-radius: 5px;
+}
+
+form input[type="submit"]:hover {
+    background: linear-gradient(65deg, blue, red);
+}
+
+.signup-link {
+    font-size: 12px;
+    font-weight: 300;
+    color: #bfbfbf;
+}
+
+.signup-link a {
+    color: rgb(166, 0, 255);
+}
+
+.wrong-pswrd {
+        color: #dc3545;
+        font-size: 12px;
+        text-align: left;
+        margin-top: 10px;
+        display: none;
+    }
+.popup
+{
+    display:none;
+    position:fixed;
+    top:30%;
+    left:40%;
+    background-color:black;
+    padding:20px;
+    border:2px solid white;
+    z-index:1000;
+    color: white;  
+
+}
+.close-btn
+{
+    position: absolute;
+    top:5px;
+    right:10px;
+    cursor:pointer;
+    font-size:20px;
+    color:red;
+}
+#resetEmail ,#resetNewPassword
+{
+    color:white;
+}
+#resetBdate
+{
+    color:white;
+}
+
+
+@media (max-width: 768px) {
+  .navdiv a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navdiv a {
+    font-size: 12px;
+  }
+}
+ </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></link>
+</head>
+<body>
+<nav class="navbar">
+        <div class="navdiv">
+            <div class="logo"><a href="#">Online Attendance Recorder</a></div>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about1.html">About</a></li>
+                <li><a href="privacy1.html">Privacy Policy</a></li>
+                <li><a href="sign.php">Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+<div class="mid">
+    <div class="wrapper">
+        <h2>Login Now</h2>
+        <?php if(isset($_SESSION['error'])): ?>
+            <p style="color: red; text-align: center;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
+        <?php endif; ?>
+        <form action="login.php" method="POST">
+            <div class="field email">
+                <div class="input-area">
+                <input type="email" placeholder="Email Address" name="email" class="input-form" required>
+                    <i class="icon fas fa-envelope"></i>
+                </div>
+            </div>
+
+            <div class="field password">
+                <div class="input-area">
+                <input type="password" placeholder="Password" name="password" class="input-form" required>
+                    <i class="icon fas fa-lock"></i>
+                </div>
+                <br>
+                <div class="pass-link"><a href="#" onclick="showPopup()">Forgot Password</a></div>
+            </div>
+            <div class="signup-link">Don't have an account? <a href="sign.php">Signup Now</a></div>
+            <input type="submit" value="Login">
+        </form>
+        
+
+    <div class="popup" id="resetPopup" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: black; padding: 20px; border: 1px solid white; border-radius: 10px; z-index: 1000;">
+    <span style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 18px;" onclick="closePopup()">✖</span>
+    <h3>Reset Password</h3>
+    <input type="email" id="resetEmail" placeholder="Enter Your Email"><br><br>
+    <input type="text" id="resetBdate" placeholder="Birth Your Correct BirthDate" onfocus="(this.type='date')" required><br><br>
+    <input type="password" id="resetNewPassword" placeholder="Enter New Password"><br><br>
+    <button onclick="resetPassword()">Submit</button>
+    <p id="resetMessage"></p>
+</div>
+
+
+    </div>
+    <script>
+          form.onsubmit = (e) => {
+            let valid = true;
+
+            // Validate email field
+            if (emailField.value.trim() === "") {
+                showError(emailError, "Email can't be blank");
+                valid = false;
+            } else if (!isValidEmail(emailField.value)) {
+                showError(emailError, "Enter a valid email address");
+                valid = false;
+            } else {
+                hideError(emailError);
+            }
+
+            // Validate password field
+            if (passwordField.value.trim() === "") {
+                showError(passwordError, "Password can't be blank");
+                valid = false;
+            } else if (passwordField.value.length < 6) {
+                showError(passwordError, "Password must be at least 6 characters");
+                valid = false;
+            } else {
+                hideError(passwordError);
+            }
+
+            // If validation fails, prevent form submission
+            if (!valid) {
+                e.preventDefault();
+            }
+        };
+
+        
+    function showPopup() {
+        document.getElementById("resetPopup").style.display = "block";
+    }
+
+    function closePopup() {
+    document.getElementById("resetPopup").style.display = "none";
+}
+</script>
+<script>
+function resetPassword() {
+    const email = document.getElementById("resetEmail").value;
+    const bdate = document.getElementById("resetBdate").value;
+    const newPassword = document.getElementById("resetNewPassword").value;
+//Ajax code
+    const xhr = new XMLHttpRequest();//Creates a new AJAX request object called xhr.
+    xhr.open("POST", "reset_password.php", true);// sending data
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");// it Means normal form format ( tells the PHP server how to read the incoming data)
+//this.responseText contains whatever the server sends back and puts inside resetmessage
+    xhr.onload = function () {
+        document.getElementById("resetMessage").textContent = this.responseText;//This function will automatically run when the server sends a reply
+    };
+//ncodeURIComponent(email)/bdate/newpassword makes the email safe for sending
+    xhr.send(`email=${encodeURIComponent(email)}&bdate=${encodeURIComponent(bdate)}&newPassword=${encodeURIComponent(newPassword)}`);//Actually sends the data collected from the input fields.
+}
+</script>
+
+</div>
+</body>
+</html>
