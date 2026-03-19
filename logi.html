@@ -298,7 +298,7 @@ form input[type="submit"]:hover {
                 <li><a href="home.html">Home</a></li>
                 <li><a href="about1.html">About</a></li>
                 <li><a href="privacy1.html">Privacy Policy</a></li>
-                <li><a href="sign.php">Sign Up</a></li>
+                <li><a href="sign.html">Sign Up</a></li>
             </ul>
         </div>
     </nav>
@@ -306,9 +306,6 @@ form input[type="submit"]:hover {
 <div class="mid">
     <div class="wrapper">
         <h2>Login Now</h2>
-        <?php if(isset($_SESSION['error'])): ?>
-            <p style="color: red; text-align: center;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
-        <?php endif; ?>
         <form action="login.php" method="POST">
             <div class="field email">
                 <div class="input-area">
@@ -329,7 +326,7 @@ form input[type="submit"]:hover {
                 
             </div>
             <input type="submit" value="Login"> <br><br>
-              <div class="signup-link">Don't have an account? <a href="sign.php">Signup Now</a></div>
+              <div class="signup-link">Don't have an account? <a href="sign.html">Signup Now</a></div>
         </form>
         
 
