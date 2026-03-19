@@ -259,7 +259,18 @@ form input[type="submit"]:hover {
 {
     color:white;
 }
-<<<<<<< HEAD
+.error-message,
+.success-message {
+    font-size: 12px;
+    margin-top: 5px;
+    display:block ;
+    padding-left: 3px;
+}
+
+.error-message {
+    color: #ff4b5c;
+     white-space: pre-line;
+}
 
 
 @media (max-width: 768px) {
@@ -304,12 +315,15 @@ form input[type="submit"]:hover {
             </div>
 
             <div class="field password">
+                <div class="pass-link"><a href="#" onclick="showPopup()">Forgot Password</a></div>
                 <div class="input-area">
-                <input type="password" placeholder="Password" name="password" class="input-form" required>
+                    
+                <input type="password" id="passF" placeholder="Password" name="password" class="input-form" required>
                     <i class="icon fas fa-lock"></i>
+                <span class="error-message"></span>
                 </div>
                 <br>
-                <div class="pass-link"><a href="#" onclick="showPopup()">Forgot Password</a></div>
+                
             </div>
             <div class="signup-link">Don't have an account? <a href="sign.php">Signup Now</a></div>
             <input type="submit" value="Login">
@@ -328,26 +342,21 @@ form input[type="submit"]:hover {
 
 
     </div>
-    <script>
-          form.onsubmit = (e) => {
-            let valid = true;
 
-            // Validate email field
-            if (emailField.value.trim() === "") {
-                showError(emailError, "Email can't be blank");
-                valid = false;
-            } else if (!isValidEmail(emailField.value)) {
-                showError(emailError, "Enter a valid email address");
-                valid = false;
-            } else {
-                hideError(emailError);
-            }
+
+<script>
+            const form = document.querySelector("form"),
+            passwordField = document.getElementById("passF"),
+            passwordError = passwordField.parentElement.querySelector(".error-message");
+
+        form.onsubmit = (e) => {
+            let valid = true;
 
             // Validate password field
             if (passwordField.value.trim() === "") {
                 showError(passwordError, "Password can't be blank");
                 valid = false;
-            } else if (passwordField.value.length < 6) {
+            } else if (!isValidPassword(passwordField.value)) {
                 showError(passwordError, "Password must be at least 6 characters");
                 valid = false;
             } else {
@@ -360,7 +369,41 @@ form input[type="submit"]:hover {
             }
         };
 
-        
+       passwordField.addEventListener("keyup", () => validateField(passwordField,passwordError,isValidPassword, "Password must contain lowercase uppercase,<br>"+"number, special character and <br>"+" be at least 8 characters" ) );
+       function validateField(input, errorElement, validationFn, errorMessage) {
+            if (input.value.trim() === "") {
+                showError(errorElement, input.name.charAt(0).toUpperCase() + input.name.slice(1) + " can't be blank");/* input.name.charAt(0).toUpperCase() capitalizes the first letter of the input name (like email). input.name.slice(1) gets the rest of the string.
+            , Combining these gives  a capitalized version of the input field's name. " can't be blank" adds the error message. (ex:email cant be blank or password...*/
+            } else if (!validationFn(input.value)) {
+                showError(errorElement, errorMessage);
+            } else {
+                hideError(errorElement);
+            }
+        }
+
+        function showError(element, message) {
+            element.innerHTML = message;
+            element.style.display = "block";
+        }
+
+        function hideError(element) {
+            element.textContent = "";
+            element.style.display = "none";
+        }
+
+  
+
+        function isValidPassword(password)
+        {
+            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+        }
+</script>
+
+
+    <script>
+         
+
+       
     function showPopup() {
         document.getElementById("resetPopup").style.display = "block";
     }
