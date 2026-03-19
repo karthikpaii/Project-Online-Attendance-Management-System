@@ -213,7 +213,8 @@ button:hover {
             </div>
 
             <div class="input_box">
-                <input type="text" id="fName" name="first_name" placeholder="Name" required>
+                <input type="text" id="fName" name="Name" placeholder="Name" required>
+                <span class="error-message"></span>
             </div>
 
             <div class="input_box">
@@ -266,8 +267,166 @@ button:hover {
         }
     });
 
+    //another js
+    
+        const form = document.querySelector("form"),
+            emailField = document.getElementById("emailF"),
+            passwordField = document.getElementById("passF"),
+            nameF = document.getElementById("fName"),
+            nameError = nameF.parentElement.querySelector(".error-message"),
+            emailError = emailField.parentElement.querySelector(".error-message"),
+            passwordError = passwordField.parentElement.querySelector(".error-message");
+
+        form.onsubmit = (e) => {
+            let valid = true;
+
+            // Validate email field
+
+            if (nameF.value.trim()=="")
+            {
+
+                showError(nameError, "name can't be blank");
+                valid = false;
+            } else if (!isValidName(nameF.value)) {
+                showError(nameError, "Enter a valid Name");
+                valid = false;
+            } else {
+                hideError(nameError);
+            }
+            
 
 
+            if (emailField.value.trim() === "") {
+                showError(emailError, "Email can't be blank");
+                valid = false;
+            } else if (!isValidEmail(emailField.value)) {
+                showError(emailError, "Enter a valid email address");
+                valid = false;
+            } else {
+                hideError(emailError);
+            }
+
+            // Validate password field
+            if (passwordField.value.trim() === "") {
+                showError(passwordError, "Password can't be blank");
+                valid = false;
+            } else if (!isValidPassword(passwordField.value)) {
+                showError(passwordError, "Password must be at least 6 characters");
+                valid = false;
+            } else {
+                hideError(passwordError);
+            }
+
+            // If validation fails, prevent form submission
+            if (!valid) {
+                e.preventDefault();
+            }
+        };
+
+        // Real-time validation
+        emailField.addEventListener("keyup", () => validateField(emailField, emailError, isValidEmail, "Enter a valid email address"));
+       passwordField.addEventListener("keyup", () => validateField(passwordField,passwordError,isValidPassword, "Password must contain lowercase, uppercase, number, special character and be at least 8 characters" ) );
+       nameF.addEventListener("keyup",()=>validateField(nameF,nameError,isValidName,"Name Should Not Contain Numbers"));
+        
+       
+       function validateField(input, errorElement, validationFn, errorMessage) {
+            if (input.value.trim() === "") {
+                showError(errorElement, input.name.charAt(0).toUpperCase() + input.name.slice(1) + " can't be blank");/* input.name.charAt(0).toUpperCase() capitalizes the first letter of the input name (like email). input.name.slice(1) gets the rest of the string.
+            , Combining these gives  a capitalized version of the input field's name. " can't be blank" adds the error message. (ex:email cant be blank or password...*/
+            } else if (!validationFn(input.value)) {
+                showError(errorElement, errorMessage);
+            } else {
+                hideError(errorElement);
+            }
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = "block";
+        }
+
+        function hideError(element) {
+            element.textContent = "";
+            element.style.display = "none";
+        }
+
+        function isValidEmail(email) {
+            return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
+        }
+
+
+        function isValidPassword(password)
+        {
+            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+        }
+
+        function isValidName(name)
+        {
+
+            return /^[A-Za-z ]+$/.test(name);
+        }
+      
+
+form.onsubmit = (e) => {
+    let valid = true;
+
+
+    // Birth date validation
+    if (!bdateField.value) {
+        showError(bdateError, "Birth date is required");
+        valid = false;
+    } else {
+        const inputParts = bdateField.value.split("-");
+        const year = parseInt(inputParts[0], 10);
+        const month = parseInt(inputParts[1], 10);
+        const day = parseInt(inputParts[2], 10);
+
+        if (isNaN(year) || isNaN(month) || isNaN(day)) {
+            showError(bdateError, "Invalid date format");
+            valid = false;
+        } else if (year< 1940 || year > 2026) {
+            showError(bdateError, "Year Should be between 1940 and 2026");
+            valid = false;
+        } else if (month > 12 || month < 1) {
+            showError(bdateError, "Month must be between 1 and 12");
+            valid = false;
+        } else if (day < 1 || day > new Date(year, month, 0).getDate()) {
+            showError(bdateError, "Invalid day for selected month");
+            valid = false;
+        } else {
+            hideError(bdateError);
+        }
+    }
+
+    if (!valid) {
+        e.preventDefault();
+    }
+};
+
+// Run validation on blur/change after user interaction
+bdateField.addEventListener("blur", () => {
+    if (!bdateField.value) {
+        showError(bdateError, "Birth date is required");
+        return;
+    }
+
+    const inputParts = bdateField.value.split("-");
+    const year = parseInt(inputParts[0], 10);
+    const month = parseInt(inputParts[1], 10);
+    const day = parseInt(inputParts[2], 10);
+
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+        showError(bdateError, "Invalid date format");
+    } else if (year<1940 || year > 2026) {
+        showError(bdateError, "Year Should be between 1940 and 2026");
+    } else if (month > 12 || month < 1) {
+        showError(bdateError, "Month must be between 1 and 12");
+    } else if (day < 1 || day > new Date(year, month, 0).getDate()) {
+        showError(bdateError, "Invalid day for selected month");
+    } else {
+        hideError(bdateError);
+    }
+});
 
     </script>
 </body>
