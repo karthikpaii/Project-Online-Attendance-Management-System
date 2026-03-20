@@ -188,6 +188,12 @@ button:hover {
     font-size: 12px;
   }
 }
+
+#op
+{
+    color: white;
+    background: black;
+}
     </style>
 </head>
 
@@ -211,13 +217,18 @@ button:hover {
 
             <div class="input_box">
                 <select name="role" class="adminbox" id="roleSelect" required>
-                    <option value="student" selected>Student</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>
 
-            <div id="collegeCodeBox" class="input_box" style="display:none;">
-                <input type="text" name="college_code" id="collegeCodeInput" placeholder="Enter College Code">
+            <div id="collegeCodeBox" class="input_box">
+                <select name="college_code" id="collegeCodeInput">
+                    <option id="op" value="" >Select College Code</option>
+                    <option id="op" value="MT1234">MT1234</option>
+                    <option id="op" value="ST1234">STJ1234</option>
+                    <option id="op" value="SYH1234">SYH1234</option>
+
+                </select>
             </div>
 
             <div class="input_box">
@@ -251,26 +262,20 @@ button:hover {
 </div>
 
 <script>
-    const roleSelect = document.getElementById('roleSelect');
-    const collegeCodeBox = document.getElementById('collegeCodeBox');
+   
+    const collegeCodeBox = document.getElementById('collegeCodeInput').value;
     const signupForm = document.getElementById('signupForm');
     const bdateField = document.getElementById("bdate");
     const bdateError = bdateField.parentElement.querySelector(".error-message");
 
-    roleSelect.addEventListener('change', function() {
-        if (this.value === 'admin') { // this refers to roleselect
-            collegeCodeBox.style.display = 'block';//shows college code
-        } else {
-            collegeCodeBox.style.display = 'none';// hides
-        }
-    });
+   
 
     signupForm.addEventListener('submit', function(e) {
         if (roleSelect.value === 'admin') {// if admin then get college code
             const collegeCodeInput = document.getElementById('collegeCodeInput').value.trim(); //store college code
-            if (collegeCodeInput !== '123456') {
+            if (collegeCodeInput== "") {
                 e.preventDefault();// stops the default action 
-                alert('Invalid College Code. Please enter the correct code.');
+                alert(' Please Select the College code.');
             }
         }
     });

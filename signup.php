@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST["password"]);
     $date = trim($_POST["bdate"]);
     $role = trim($_POST["role"]);
+    $college_code = $_POST['college_code'];
 
     if (empty($username) || empty($email) || empty($password) || empty($date) || empty($role)) {
         $_SESSION['error'] = "All fields are required.";
