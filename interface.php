@@ -1,4 +1,19 @@
-<!--files:interface.php, inter.php-->
+<?php
+session_start();
+
+// block access if not logged in
+if (!isset($_SESSION['user'])) {  //If user is NOT stored in session User is NOT logged in
+    header("Location: sign.html");
+    exit();
+}
+
+// prevent back button cache
+header("Cache-Control: no-cache, no-store, must-revalidate"); //Do NOT save this page in cache
+header("Pragma: no-cache");
+header("Expires: 0");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,7 +207,7 @@ h1 {
                 <li><a href="home2.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="logout.php" onclick="logfunction()"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+                <li> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
 
             </ul>
         </div>
@@ -215,8 +230,8 @@ h1 {
     <a href="#" id="mark-attendance"><i class="fas fa-check-square"></i> Mark Attendance</a>
     <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>View Attendance</a>
     <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a>
-    <p style="color:#e74c3c; margin-top: 20px;"><i class="fas fa-user-shield"></i> Welcome Admin</p>
-    <button class="Logout"><a href="logout.php" onclick="logfunction()"><i class="fas fa-sign-out-alt"></i> Logout</a></button>
+    <p style="color:#e74c3c; margin-top: 20px;"><i class="fas fa-user-shield"></i> <p style="color:#e74c3c"> Welcome <?php echo $_SESSION['user']; ?></p>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i>  
 </div>
     <div class="content" id="content-area" style="margin-left: 220px; padding: 10px;">
 <!---Home Page-->

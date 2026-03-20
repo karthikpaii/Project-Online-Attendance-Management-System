@@ -2,13 +2,13 @@
 session_start();
 
 // block access if not logged in
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user'])) {  //If user is NOT stored in session User is NOT logged in
     header("Location: sign.html");
     exit();
 }
 
 // prevent back button cache
-header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Cache-Control: no-cache, no-store, must-revalidate"); //Do NOT save this page in cache
 header("Pragma: no-cache");
 header("Expires: 0");
 ?>
