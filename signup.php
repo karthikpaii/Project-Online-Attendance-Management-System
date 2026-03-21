@@ -2,6 +2,8 @@
 <?php
 session_start();
 
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["Name"]);
     $email = trim($_POST["email"]);
