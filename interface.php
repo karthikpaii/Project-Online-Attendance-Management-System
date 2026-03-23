@@ -11,6 +11,10 @@ header("Pragma: no-cache");
 header("Expires: 0");
 ?>
 
+<?php
+$college_code = $_SESSION['college_code'];
+echo $college_code;
+?>
 
 <!DOCTYPE html>
 <html lang="en">
