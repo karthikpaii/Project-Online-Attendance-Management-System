@@ -13,7 +13,7 @@ header("Expires: 0");
 
 <?php
 $college_code = $_SESSION['college_code'];
-echo $college_code;
+
 ?>
 
 <!DOCTYPE html>
@@ -209,12 +209,13 @@ h1 {
                 <li><a href="home2.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
-                <li> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
+                <li onclick="logfunction()"> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
 
             </ul>
         </div>
 </nav>
-<script>function logfunction()
+<script>
+function logfunction()
 {
   var a = confirm("Do you want to logout?")
    alert(a)
