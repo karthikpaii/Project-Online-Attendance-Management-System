@@ -227,7 +227,7 @@ function logfunction()
     <!--- Added icon from awesom font--->
     <h2><i class="fas  fa-user-shield"></i> Admin</h2>
     <a href="#" onclick="loadContent('Dashboard')"><i class="fas fa-home"></i> Dashboard</a>
-    <a href="#" id="add-batch"><i class="fas fa-layer-group"></i> Add Batch</a>
+    <a href="#" onclick="loadContent('add-batch')"><i class="fas fa-layer-group"></i> Add Batch</a>
     <a href="#" onclick="loadContent('add-student')"><i class="fas fa-user-plus"></i> Add Student</a>
     <a href="#" onclick="loadContent('view-student')"><i class="fas fa-users"></i> View Student</a>
     <a href="#" onclick="loadContent('mark-attendance')"><i class="fas fa-check-square"></i> Mark Attendance</a>
@@ -259,24 +259,19 @@ function logfunction()
   {
     let content=document.getElementById("content-area");
 
-    if(type=== "add-student")
-    {
-      content.innerHTML=`
-      <div class="form-container">
-      <h2>Add Student </h2>
+     if( type="add_batch")
+     {
+        content.innerHTML=`<iframe src="add_batch.php" width="100%" height="800px" style="border:none;"></iframe> `;
 
-      <form method="POST"  action="add_student.php">
-      <input type="text" name="roll_no" placeholder="Roll No" required><br><br>
-                <input type="text" name="name" placeholder="Name" required><br><br>
-                <input type="email" name="email" placeholder="Email"><br><br>
-                <input type="date" name="dob" required><br><br>
-                <button type="submit">Add Student</button>
-            </form>
-        </div>`;
+     }
+
+    else if(type=== "add-student")
+    {
+      content.innerHTML=`<iframe src="add_student.html" width="100%" height="800px" style="border:none;"></iframe> `;
     }
     else if(type==="mark-attendance")
     {
-      content.innerHTML=`<iframe src="mark_attendance.php" width="100%" height="500px" style="border:none;"></iframe>`;
+      content.innerHTML=`<iframe src="mark_attendance.php" width="100%" height="800px" style="border:none;"></iframe>`;
     } 
      else if (type === "mark-attendance") {
         content.innerHTML = `
