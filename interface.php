@@ -259,7 +259,7 @@ function logfunction()
   {
     let content=document.getElementById("content-area");
 
-     if( type="add_batch")
+     if( type==="add-batch")
      {
         content.innerHTML=`<iframe src="add_batch.php" width="100%" height="800px" style="border:none;"></iframe> `;
 
