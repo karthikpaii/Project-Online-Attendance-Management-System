@@ -218,7 +218,7 @@ h1 {
 function logfunction()
 {
   var a = confirm("Do you want to logout?")
-   alert(a)
+   
 }
 </script>
 <!---side bar-->
