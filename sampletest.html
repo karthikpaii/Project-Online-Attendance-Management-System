@@ -1,73 +1,21 @@
-<?php  
-session_start();
-
-if (!isset($_SESSION['user']) || !isset($_SESSION['college_code'])) {
-    header("Location: sign.html");
-    exit();
-}
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $batch_name = trim($_POST["batch_name"]);
-    $classes = trim($_POST["classes"]);
-    $year = trim($_POST["year"]);
-    $college_code = $_SESSION['college_code'];
-
-   
-    if (empty($batch_name) || empty($classes) || empty($year)) {
-        $_SESSION['error'] = "All fields are required!";
-    } else {
-
-      
-        $conn = new mysqli("localhost", "root", "", "users");
-
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        
-        $stmt = $conn->prepare("INSERT INTO batches (batch_name, classes, year, college_code) VALUES (?, ?, ?, ?)");
-
-        if (!$stmt) {
-            die("Prepare failed: " . $conn->error);
-        }
-
-        
-        $stmt->bind_param("ssss", $batch_name, $classes, $year, $college_code);
-
-        if ($stmt->execute()) {
-            $_SESSION['success'] = "Batch added successfully!";
-        } else {
-            $_SESSION['error'] = "Error adding batch!";
-        }
-
-        $stmt->close();
-        $conn->close();
-    }
-}
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Batch</title>
-    <style>
+<meta charset="UTF-8">
+<title>Add Batch</title>
+<style>
     body {
         font-family: Arial, sans-serif;
-        background:  #e8f0f2;
+        background: #e8f0f2;
         margin: 0;
         padding: 0;
-        
     }
 
     .container {
         width: 80%;
-        position:absolute;
         margin: 50px auto;
-        background: #fff;
-        padding: 30px;
-        padding-bottom:50px;
+        background:#e8f0f2;
+       
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
@@ -100,16 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 5px;
-    }  
-
-    .success
-    {
-        background:#28a745;
-    }
-
-    .error
-    {
-        background:#dc3545;
     }
 
     .btn {
@@ -127,12 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .btn:hover {
         background: #0056b3;
     }
-
 </style>
 </head>
 <body>
 
-<h2>Add New Batch</h2>
 <div class="container">
     <h2>Add Batch</h2>
 
@@ -158,18 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="btn">Add Batch</button>
 
     </form>
-
-<?php
-if (isset($_SESSION['success'])) {
-   echo "<div class='message success'>" . $_SESSION['success'] . "</div>";
-    unset($_SESSION['success']);
-}
-if (isset($_SESSION['error'])) {
-    echo "<div class='message error'>" . $_SESSION['error'] . "</div>";
-    unset($_SESSION['error']);
-}
-?>
 </div>
-<br>
+
 </body>
 </html>
