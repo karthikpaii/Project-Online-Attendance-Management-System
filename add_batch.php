@@ -46,6 +46,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->close();
     }
 }
+
+
+    $editData=null;
+
+    if(isset($_GET['edit']))
+        {
+            $id=$_GET['edit'];
+
+            $conn=new mysqli("localhost","root","","users");
+
+
+            $stmt= $conn->prepare("SELECT * FROM batches WHERE id=?");
+            $stmt->bind_param("i",$id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $editData = $result->fetch_assoc();
+            $stmt->close();
+            $conn->close();
+        }
 ?>
 
 <!DOCTYPE html>
@@ -61,16 +80,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
     }
 
-    .container {
-        width: 80%;
-        position:absolute;
-        margin: 50px auto;
-        background: #fff;
-        padding: 30px;
-        padding-bottom:50px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+    .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.table th {
+    background: #007bff;
+    color: white;
+}
+
+.container, .con {
+    width: 80%;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
 
     h2 {
         text-align: center;
@@ -128,6 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         background: #0056b3;
     }
 
+
+
 </style>
 </head>
 <body>
@@ -170,6 +207,86 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 </div>
-<br>
+
+   <div class="con">  
+    <?php
+    $conn = new mysqli("localhost", "root", "", "users");
+    $college_code = $_SESSION['college_code'];
+
+    $result = $conn->query("SELECT * FROM batches WHERE college_code='$college_code' ORDER BY id DESC");
+    ?>
+
+    <h2 style="margin-top:30px; text-align:center;">Batch List</h2>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Batch Name</th>
+            <th>Class</th>
+            <th>Year</th>
+            <th>Action</th>
+        </tr>
+
+        <?php
+        while($row = $result->fetch_assoc()) {
+            echo "<tr id='row-{$row['id']}'>
+                    <td>{$row['id']}</td>
+                    <td>{$row['batch_name']}</td>
+                    <td>{$row['classes']}</td>
+                    <td>{$row['year']}</td>
+                    <td>
+                        <button onclick='deleteBatch({$row['id']})'>Delete</button>
+                        <button onclick='updateBatch({$row['id']})'> Update</button>
+                    </td>
+                  </tr>";
+        }
+        $conn->close();
+        ?>
+    </table>
+</div>
+
+<script>
+    // function deleteBatch(id)
+    // {
+    //     if(!confirm("Do You Want To Delete?")) return;
+
+
+    //     fetch("add_batch.php",
+    //         {
+    //             method: "POST",
+    //             headers: {
+    //                "Content-Type": "application/x-www-form-urlencoded" 
+    //             },
+    //             body: "action=delete&id=" + id
+    //         })
+
+    //         .then(res=>res.text())
+    //         .then(data=>{
+    //             document.getElementById("row-" + id).remove();
+    //         });
+    // }
+
+
+//     function deleteBatch(id) {
+//     if (!confirm("Do You Want To Delete?")) return;
+
+//     fetch("add_batch.php", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/x-www-form-urlencoded"
+//         },
+//         body: "action=delete&id=" + id
+//     })
+//     .then(res => res.text())
+//     .then(data => {
+//         if (data === "success") {
+//             document.getElementById("row-" + id).remove();
+//         } else {
+//             alert("Delete failed from database!");
+//         }
+//     });
+// }
+</script>
+
 </body>
 </html>
