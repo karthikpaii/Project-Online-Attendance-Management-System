@@ -20,7 +20,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'delete') {
     }
 
     $stmt = $conn->prepare("DELETE FROM batches WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("i", $id); //i used -> it means $id is a type of int 
 
     if ($stmt->execute()) {
         echo "success"; 
@@ -53,7 +53,7 @@ if(isset($_POST['action']) && $_POST['action']=='update')
 
 
          $stmt=$conn->prepare("UPDATE batches SET batch_name=?, classes=?, year=? WHERE id=?");
-         $stmt->bind_param("sssi",$batch_name,$classes,$year,$id);
+         $stmt->bind_param("sssi",$batch_name,$classes,$year,$id); //batch name is s {string}, clss and year is string and id is int
          
          if($stmt->execute())
             {
@@ -306,7 +306,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 if (isset($_SESSION['success'])) {
    echo "<div class='message success'>" . $_SESSION['success'] . "</div>";
-    unset($_SESSION['success']);
+    unset($_SESSION['success']); //unset Remove the message after showing it
 }
 if (isset($_SESSION['error'])) {
     echo "<div class='message error'>" . $_SESSION['error'] . "</div>";
@@ -336,12 +336,13 @@ if (isset($_SESSION['error'])) {
 
         <?php
         while($row = $result->fetch_assoc()) {
+            #name text normally displays text and name-input for updating [initially hidden]
             echo "<tr id='row-{$row['id']}'>
                     <td>{$row['id']}</td>
 
                     <td>
                     <span id='name-text-{$row['id']}'>{$row['batch_name']} </span>
-                    <input type='text' id='name-input-{$row['id']}' value='{$row['batch_name']}' style='display:none;'>
+                    <input type='text' id='name-input-{$row['id']}' value='{$row['batch_name']}' style='display:none;'>  
                     </td>
 
 
@@ -435,12 +436,13 @@ function saveRow(id)
     let classes=document.getElementById("class-input-" + id).value;
     let year=document.getElementById("year-input-" + id).value;
 
-    fetch("",{
-        method:"POST",
+    fetch("",{ //"" means same page [fetch() sends data to server without relaoding]
+        method:"POST", //using post method sending data
         headers: {
-            "Content-Type":"application/x-www-form-urlencoded"
+            "Content-Type":"application/x-www-form-urlencoded" //format of  data
          },
-        body: "action=update&id=" + id + "&batch_name=" + name + "&classes=" + classes + "&year=" + year
+         //sending data to server [& is seperator]
+       body: "action=update&id=" + id + "&batch_name=" + encodeURIComponent(name) + "&classes=" + encodeURIComponent(classes) +  "&year=" + encodeURIComponent(year)
     })
     .then(res => res.text())
     .then(data => {
