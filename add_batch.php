@@ -4,9 +4,38 @@ session_start();
 if (!isset($_SESSION['user']) || !isset($_SESSION['college_code'])) {
     header("Location: sign.html");
     exit();
+}?>
+
+
+<?php
+
+if (isset($_POST['action']) && $_POST['action'] == 'delete') {
+
+    $id = $_POST['id'];
+
+    $conn = new mysqli("localhost", "root", "", "users");
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $stmt = $conn->prepare("DELETE FROM batches WHERE id = ?");
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        echo "success"; 
+    } else {
+        echo "error";
+    }
+
+    $stmt->close();
+    $conn->close();
+    exit(); 
 }
+?>
 
 
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $batch_name = trim($_POST["batch_name"]);
@@ -46,25 +75,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->close();
     }
 }
+?>
 
 
-    $editData=null;
+<?php
+if(isset($_POST['action']) && $_POST['action']=='update')
+    {
+        $id=$_POST['id'];
+        $batch_name=$_POST['batch_name'];
+        $classes=$_POST['classes'];
+        $year=$_POST['year'];
 
-    if(isset($_GET['edit']))
-        {
-            $id=$_GET['edit'];
 
-            $conn=new mysqli("localhost","root","","users");
+        $conn=new mysqli("localhost","root","","users");
+
+        if($conn->connect_error)
+            {
+                die("Conntection Failed". $conn->connect_error);
+            }
 
 
-            $stmt= $conn->prepare("SELECT * FROM batches WHERE id=?");
-            $stmt->bind_param("i",$id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $editData = $result->fetch_assoc();
+         $stmt=$conn->prepare("UPDATE batches SET batch_name=?, classes=?, year=? WHERE id=?");
+         $stmt->bind_param("sssi",$batch_name,$classes,$year,$id);
+         
+         if($stmt->execute())
+            {
+                echo "success";
+
+            }else {
+
+            echo "Error";
+            }
+
             $stmt->close();
             $conn->close();
-        }
+            exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -139,7 +185,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     .success
     {
-        background:#28a745;
+       text-align:center;
+       padding:10px;
     }
 
     .error
@@ -159,10 +206,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         cursor: pointer;
     }
 
+    .action-button
+    {
+        display:flex;
+        gap:10px;
+        justify-content:center;
+    }
+
+        .delete-btn, .update-btn {
+       padding:6px 10px;
+        
+      
+
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
     .btn:hover {
         background: #0056b3;
     }
 
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    margin: 15% auto;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.modal-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.yes-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.no-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 
 </style>
@@ -235,9 +343,11 @@ if (isset($_SESSION['error'])) {
                     <td>{$row['classes']}</td>
                     <td>{$row['year']}</td>
                     <td>
-                        <button onclick='deleteBatch({$row['id']})'>Delete</button>
-                        <button onclick='updateBatch({$row['id']})'> Update</button>
-                    </td>
+                          <div class=\"action-button\">
+                          <button class=\"delete-btn\" onclick='deleteBatch({$row['id']})'>Delete</button>
+
+                          <button class=\"update-btn\" onclick='updateBatch({$row['id']})'>Update</button>
+                        </td>
                   </tr>";
         }
         $conn->close();
@@ -245,47 +355,66 @@ if (isset($_SESSION['error'])) {
     </table>
 </div>
 
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <p> Are You Sure you want to delete?</P>
+        <div class="modal-buttons">
+            <button onclick="confirmDelete()" class="yes-btn">Yes</button>
+            <button onclick="closeModal()" class="no-btn">Cancel</button>
+    </div>
+</div>
+</div>
 <script>
-    // function deleteBatch(id)
-    // {
-    //     if(!confirm("Do You Want To Delete?")) return;
+function deleteBatch(id) {
+    if (!confirm("Do You Want To Delete?")) return;
+
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "action=delete&id=" + id
+    })
+    .then(res => res.text())
+    .then(data => {
+        if (data.trim() === "success") {
+            document.getElementById("row-" + id).remove();
+        } else {
+            alert("Delete failed from database!");
+        }
+    });
+}
 
 
-    //     fetch("add_batch.php",
-    //         {
-    //             method: "POST",
-    //             headers: {
-    //                "Content-Type": "application/x-www-form-urlencoded" 
-    //             },
-    //             body: "action=delete&id=" + id
-    //         })
+let deleteId = null;
 
-    //         .then(res=>res.text())
-    //         .then(data=>{
-    //             document.getElementById("row-" + id).remove();
-    //         });
-    // }
+function deleteBatch(id) {
+    deleteId = id;
+    document.getElementById("deleteModal").style.display = "block";
+}
 
+function closeModal() {
+    document.getElementById("deleteModal").style.display = "none";
+}
 
-//     function deleteBatch(id) {
-//     if (!confirm("Do You Want To Delete?")) return;
-
-//     fetch("add_batch.php", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/x-www-form-urlencoded"
-//         },
-//         body: "action=delete&id=" + id
-//     })
-//     .then(res => res.text())
-//     .then(data => {
-//         if (data === "success") {
-//             document.getElementById("row-" + id).remove();
-//         } else {
-//             alert("Delete failed from database!");
-//         }
-//     });
-// }
+function confirmDelete() {
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "action=delete&id=" + deleteId
+    })
+    .then(res => res.text())
+    .then(data => {
+        if (data.trim() === "success") {
+            document.getElementById("row-" + deleteId).remove();
+        } else {
+            alert("Delete failed!");
+        }
+        closeModal();
+    });
+}
 </script>
 
 </body>
