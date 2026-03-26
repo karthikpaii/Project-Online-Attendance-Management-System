@@ -267,7 +267,7 @@ function logfunction()
 
     else if(type=== "add-student")
     {
-      content.innerHTML=`<iframe src="add_student.html" width="100%" height="800px" style="border:none;"></iframe> `;
+      content.innerHTML=`<iframe src="add_student.php" width="100%" height="800px" style="border:none;"></iframe> `;
     }
     else if(type==="mark-attendance")
     {
