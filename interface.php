@@ -273,7 +273,7 @@ function logfunction()
     }
     else if(type==="view-student")
     {
-      content.innerHTML=`<iframe src="view_student_form.php" width="100%" height="800px" style="border:none;"></iframe>`;
+      content.innerHTML=`<iframe src="view_student.php" width="100%" height="800px" style="border:none;"></iframe>`;
     } 
      else if (type === "mark-attendance") {
         content.innerHTML = `
