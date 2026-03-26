@@ -36,6 +36,41 @@ if (isset($_POST['action']) && $_POST['action'] == 'delete') {
 
 
 <?php
+if(isset($_POST['action']) && $_POST['action']=='update')
+    {
+        $id=$_POST['id'];
+        $batch_name=$_POST['batch_name'];
+        $classes=$_POST['classes'];
+        $year=$_POST['year'];
+
+
+        $conn=new mysqli("localhost","root","","users");
+
+        if($conn->connect_error)
+            {
+                die("Conntection Failed". $conn->connect_error);
+            }
+
+
+         $stmt=$conn->prepare("UPDATE batches SET batch_name=?, classes=?, year=? WHERE id=?");
+         $stmt->bind_param("sssi",$batch_name,$classes,$year,$id);
+         
+         if($stmt->execute())
+            {
+                echo "success";
+
+            }else {
+
+            echo "Error";
+            }
+
+            $stmt->close();
+            $conn->close();
+            exit();
+    }
+?>
+
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $batch_name = trim($_POST["batch_name"]);
@@ -75,42 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->close();
     }
 }
-?>
-
-
-<?php
-if(isset($_POST['action']) && $_POST['action']=='update')
-    {
-        $id=$_POST['id'];
-        $batch_name=$_POST['batch_name'];
-        $classes=$_POST['classes'];
-        $year=$_POST['year'];
-
-
-        $conn=new mysqli("localhost","root","","users");
-
-        if($conn->connect_error)
-            {
-                die("Conntection Failed". $conn->connect_error);
-            }
-
-
-         $stmt=$conn->prepare("UPDATE batches SET batch_name=?, classes=?, year=? WHERE id=?");
-         $stmt->bind_param("sssi",$batch_name,$classes,$year,$id);
-         
-         if($stmt->execute())
-            {
-                echo "success";
-
-            }else {
-
-            echo "Error";
-            }
-
-            $stmt->close();
-            $conn->close();
-            exit();
-    }
 ?>
 
 <!DOCTYPE html>
@@ -339,14 +338,31 @@ if (isset($_SESSION['error'])) {
         while($row = $result->fetch_assoc()) {
             echo "<tr id='row-{$row['id']}'>
                     <td>{$row['id']}</td>
-                    <td>{$row['batch_name']}</td>
-                    <td>{$row['classes']}</td>
-                    <td>{$row['year']}</td>
-                    <td>
-                          <div class=\"action-button\">
-                          <button class=\"delete-btn\" onclick='deleteBatch({$row['id']})'>Delete</button>
 
-                          <button class=\"update-btn\" onclick='updateBatch({$row['id']})'>Update</button>
+                    <td>
+                    <span id='name-text-{$row['id']}'>{$row['batch_name']} </span>
+                    <input type='text' id='name-input-{$row['id']}' value='{$row['batch_name']}' style='display:none;'>
+                    </td>
+
+
+                    <td>
+                    <span id='class-text-{$row['id']}'>{$row['classes']} </span>
+                    <input type='text' id='class-input-{$row['id']}' value='{$row['classes']}' style='display:none;'>
+                    </td>
+
+
+                    <td>
+                    <span id='year-text-{$row['id']}'>{$row['year']} </span>
+                    <input type='text' id='year-input-{$row['id']}' value='{$row['year']}' style='display:none;'>
+                    </td>
+
+                    <td>
+                          <div class='action-button'>
+                          <button class='delete-btn' onclick='deleteBatch({$row['id']})'>Delete</button>
+
+                          <button class='update-btn' onclick='editRow({$row['id']})' id='edit-btn-{$row['id']}'>Update</button>
+                          <button class='update-btn' onclick='saveRow({$row['id']})' id='save-btn-{$row['id']}' style='display:none;'>Save</button>
+                          </div>
                         </td>
                   </tr>";
         }
@@ -365,26 +381,6 @@ if (isset($_SESSION['error'])) {
 </div>
 </div>
 <script>
-function deleteBatch(id) {
-    if (!confirm("Do You Want To Delete?")) return;
-
-    fetch("", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "action=delete&id=" + id
-    })
-    .then(res => res.text())
-    .then(data => {
-        if (data.trim() === "success") {
-            document.getElementById("row-" + id).remove();
-        } else {
-            alert("Delete failed from database!");
-        }
-    });
-}
-
 
 let deleteId = null;
 
@@ -413,6 +409,63 @@ function confirmDelete() {
             alert("Delete failed!");
         }
         closeModal();
+    });
+}
+
+
+
+function editRow(id)
+{
+    document.getElementById("name-text-" + id).style.display="none";
+    document.getElementById("class-text-" + id).style.display="none";
+    document.getElementById("year-text-" + id).style.display="none";
+
+
+    document.getElementById("name-input-" + id).style.display="inline";
+    document.getElementById("class-input-" + id).style.display="inline";
+    document.getElementById("year-input-" + id).style.display="inline";
+
+    document.getElementById("edit-btn-" + id).style.display="none";
+    document.getElementById("save-btn-" + id).style.display="inline";
+}
+
+function saveRow(id)
+{
+    let name=document.getElementById("name-input-" + id).value;
+    let classes=document.getElementById("class-input-" + id).value;
+    let year=document.getElementById("year-input-" + id).value;
+
+    fetch("",{
+        method:"POST",
+        headers: {
+            "Content-Type":"application/x-www-form-urlencoded"
+         },
+        body: "action=update&id=" + id + "&batch_name=" + name + "&classes=" + classes + "&year=" + year
+    })
+    .then(res => res.text())
+    .then(data => {
+        if (data.trim() === "success") {
+
+            // update UI
+            document.getElementById("name-text-" + id).innerText = name;
+            document.getElementById("class-text-" + id).innerText = classes;
+            document.getElementById("year-text-" + id).innerText = year;
+
+            // switch back
+            document.getElementById("name-text-" + id).style.display = "inline";
+            document.getElementById("class-text-" + id).style.display = "inline";
+            document.getElementById("year-text-" + id).style.display = "inline";
+
+            document.getElementById("name-input-" + id).style.display = "none";
+            document.getElementById("class-input-" + id).style.display = "none";
+            document.getElementById("year-input-" + id).style.display = "none";
+
+            document.getElementById("edit-btn-" + id).style.display = "inline";
+            document.getElementById("save-btn-" + id).style.display = "none";
+
+        } else {
+            alert("Update failed!");
+        }
     });
 }
 </script>
