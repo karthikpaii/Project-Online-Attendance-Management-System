@@ -232,7 +232,7 @@ function logfunction()
     <a href="#" onclick="loadContent('view-student')"><i class="fas fa-users"></i> View Student</a>
     <a href="#" onclick="loadContent('mark-attendance')"><i class="fas fa-check-square"></i> Mark Attendance</a>
     <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>View Attendance</a>
-    <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>Admins</a>
+    <a href="#" onclick="loadContent('admins')"><i class="fas fa-user-shield"></i>Admins</a>
     <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>AI Chat</a>
     <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a>
     <p style="color:#e74c3c; margin-top: 20px;"><i class="fas fa-user-shield"></i> Welcome <?php echo $_SESSION['user']; ?></p>
@@ -275,9 +275,9 @@ function logfunction()
     {
       content.innerHTML=`<iframe src="view_student.php" width="100%" height="800px" style="border:none;"></iframe>`;
     } 
-     else if (type === "mark-attendance") {
+     else if (type === "admins") {
         content.innerHTML = `
-        <iframe src="mark_attendance.php" width="100%" height="500px" style="border:none;"></iframe>
+        <iframe src="admins.php" width="100%" height="500px" style="border:none;"></iframe>
         `;
     }
 

@@ -59,20 +59,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $result = $check->get_result();
 
         if ($result->num_rows > 0) {
-            echo "<script>alert('❌ Roll number already exists!');</script>";
-        } else {
+    echo "<script>
+        window.onload = function() {
+            showMessage('❌ Roll number already exists!', 'error');
+        };
+    </script>";
+} else {
             $stmt = $conn->prepare("INSERT INTO students (rollno, name, batch_name, class_name, phone, email, dob, college_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("ssssssss", $rollno, $student_name, $batch, $class, $phone, $email, $dob, $college_code);
-
-            if ($stmt->execute()) {
-                echo "<script>alert('✅ Student added successfully!');</script>";
-            } else {
+           
+           if ($stmt->execute()) {
+    echo "<script>
+        window.onload = function() {
+            showMessage('Student added successfully!', 'success');
+        };
+    </script>";
+} else {
     if ($stmt->errno == 1062) {
-        echo "<script>alert('❌ Roll number already exists in this batch & class!');</script>";
+        echo "<script>
+            window.onload = function() {
+                showMessage('Roll number already exists in this batch & class!', 'error');
+            };
+        </script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>
+            window.onload = function() {
+                showMessage('⚠️ Error: ".$stmt->error."', 'error');
+            };
+        </script>";
     }
-}
+}       
  $stmt->close();
     }
 
@@ -147,7 +163,7 @@ h2 {
     }
 
     .container{
-    width: 80%;
+    width: 50%;
     margin: 30px auto;
     background: #fff;
     padding: 30px;
@@ -156,11 +172,37 @@ h2 {
 }
 
 
+.message
+{
+    display:none;
+    position: fixed;
+    top:20px;
+    right:20px;
+   
+    color:#fff;
+    padding:15px 25px;
+    border-radius:8px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    z-index:999;
+    font-size:16px;
+}
+
+
+.error
+{
+    
+    background:#dc3545;
+}
+
+.success
+{
+    background:#28a745;
+}
 </style>
 
 <h2>Add Student</h2>
 
-
+<div id="message" class="message" style="display:none;"></div>
 <div class="container">
 <form method="post">
 <div class="form-row">
@@ -200,10 +242,10 @@ h2 {
       </div>
     <div class="form-group">
     <label> Date Of Birth:</label>
-    <input type="date" name="dob" ><br><br>
+    <input type="date" name="dob" >
         </div>
 
-        <br>
+        
     <input type="submit" class="btn"  value="Add Student">
 
 </form>
@@ -232,4 +274,20 @@ document.getElementById('batch').addEventListener('change', function () {
         })
         .catch(err => console.error(err));
 });
+</script>
+
+<script>
+
+function showMessage(text, type='success') {
+    const msgDiv = document.getElementById('message');
+    msgDiv.textContent = text;
+    msgDiv.className = 'message ' + type; // keep base style
+    msgDiv.style.display = 'block';
+
+    // hide after 3 seconds
+    setTimeout(() => {
+        msgDiv.style.display = 'none';
+    }, 3000);
+}
+
 </script>
