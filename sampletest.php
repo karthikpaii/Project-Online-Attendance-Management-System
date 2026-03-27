@@ -58,11 +58,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'update') {
 
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
-    if ($conn->connect_error) {
-        echo "Connection failed: " . $conn->connect_error;
-        exit();
-    }
-
+    // ✅ CHECK PREPARE FIRST
     $stmt = $conn->prepare("UPDATE attendance SET status=? WHERE id=? AND college_code=?");
 
     if (!$stmt) {
@@ -250,10 +246,8 @@ function saveRow(id){
     })
     .then(res=>res.text())
     .then(resp=>{
-        console.log(resp); // 👈 DEBUG (see response in console)
-        resp = resp.trim();
-
-        if(resp === "success"){
+    
+        if(resp.trim()==="success"){
             document.getElementById(`status-text-${id}`).innerText = status;
 
             document.getElementById(`status-text-${id}`).style.display="inline";
@@ -262,7 +256,7 @@ function saveRow(id){
             document.getElementById("edit-btn-"+id).style.display="inline-block";
             document.getElementById("save-btn-"+id).style.display="none";
         } else {
-            alert("Update failed: " + resp);
+            alert("Update failed!");
         }
     });
 }
