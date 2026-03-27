@@ -231,7 +231,7 @@ function logfunction()
     <a href="#" onclick="loadContent('add-student')"><i class="fas fa-user-plus"></i> Add Student</a>
     <a href="#" onclick="loadContent('view-student')"><i class="fas fa-users"></i> View Student</a>
     <a href="#" onclick="loadContent('mark-attendance')"><i class="fas fa-check-square"></i> Mark Attendance</a>
-    <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>View Attendance</a>
+    <a href="#" onclick="loadContent('view-attendance')"><i class="fas fa-check-square"></i> View Attendance</a>
     <a href="#" onclick="loadContent('admins')"><i class="fas fa-user-shield"></i>Admins</a>
     <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>AI Chat</a>
     <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a>
@@ -277,17 +277,21 @@ function logfunction()
     } 
      else if (type === "admins") {
         content.innerHTML = `
-        <iframe src="admins.php" width="100%" height="500px" style="border:none;"></iframe>
+        <iframe src="admins.php" width="100%" height="800px" style="border:none;"></iframe>
         `;
     }
 
     else if (type === "mark-attendance") {
         content.innerHTML = `
-        <iframe src="add_attendance.php" width="100%" height="500px" style="border:none;"></iframe>
+        <iframe src="add_attendance.php" width="100%" height="800px" style="border:none;"></iframe>
         `;
     }
 
-
+ else if (type === "view-attendance") {
+        content.innerHTML = `
+        <iframe src="view_attendance.php" width="100%" height="800px" style="border:none;"></iframe>
+        `;
+    }
 
     else {
         content.innerHTML = "<h2>Dashboard</h2>";
