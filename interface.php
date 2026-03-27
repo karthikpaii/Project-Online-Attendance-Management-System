@@ -206,7 +206,7 @@ h1 {
         <div class="navdiv">
             <div class="logo"><a href="#">Online Attendance Recorder</a></div>
             <ul>
-                <li><a href="home2.html">Home</a></li>
+                <li><a href="home2.php">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
                 <li onclick="logfunction()"> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
@@ -280,6 +280,14 @@ function logfunction()
         <iframe src="admins.php" width="100%" height="500px" style="border:none;"></iframe>
         `;
     }
+
+    else if (type === "mark-attendance") {
+        content.innerHTML = `
+        <iframe src="add_attendance.php" width="100%" height="500px" style="border:none;"></iframe>
+        `;
+    }
+
+
 
     else {
         content.innerHTML = "<h2>Dashboard</h2>";
