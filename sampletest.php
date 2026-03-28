@@ -1,12 +1,21 @@
 <style>
-body { font-family: Arial, sans-serif; background: #e8f0f2; margin:0; padding:20px;}
-h2 { text-align:center; color: #333;}
-table { width:100%; border-collapse:collapse; margin-top:10px; background:#fff;}
-th, td { border:1px solid #ddd; padding:12px; text-align:center;}
-th { background:#007bff; color:#fff;}
-.btn { padding:6px 12px; border:none; border-radius:4px; cursor:pointer; color:#fff; background:#007bff;}
-</style>
-
+        body { font-family: Arial, sans-serif; background: #e8f0f2; margin:0; padding:20px;}
+        h2 { text-align:center; color: #333;}
+        .filter-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;}
+        select, input[type=submit] { padding:10px; border-radius:5px; border:1px solid #ccc; font-size:14px;}
+        input[type=submit] { cursor:pointer; background:#007bff; color:#fff; border:none; transition: 0.3s; }
+        input[type=submit]:hover { background:#0056b3; }
+        table { width:100%; border-collapse:collapse; margin-top:10px; background:#fff;}
+        th, td { border:1px solid #ddd; padding:12px; text-align:center;}
+        th { background:#007bff; color:#fff;}
+        .action-button { display:flex; justify-content:center; gap:8px;}
+        .btn { padding:6px 12px; border:none; border-radius:4px; cursor:pointer; color:#fff; background:#007bff;}
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;}
+        .modal-content { background:#fff; width:300px; margin:15% auto; padding:20px; border-radius:10px; text-align:center;}
+        .modal-buttons { display:flex; justify-content:space-around; margin-top:15px;}
+        .yes-btn { background:#dc3545; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;}
+        .no-btn { background:#6c757d; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;}
+    </style>
 <?php
 session_start();
 
@@ -151,7 +160,7 @@ $batch_result = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE coll
 <body>
 
 <h2>Student Management</h2>
-
+<div class="filter-container">
 <form id="batchForm">
     <label>Batch:</label>
     <select id="batchSelect" required>
@@ -166,9 +175,9 @@ $batch_result = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE coll
         <option value="">-- Select Batch First --</option>
     </select>
 
-    <button type="submit">Load Data</button>
+    <button type="submit" class="btn">Load Data</button>
 </form>
-
+        </div>
 <div id="data"></div>
 
 <script>

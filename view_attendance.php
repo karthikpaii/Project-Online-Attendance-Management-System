@@ -1,215 +1,292 @@
+<style>
+        body { font-family: Arial, sans-serif; background: #e8f0f2; margin:0; padding:20px;}
+        h2 { text-align:center; color: #333;}
+        .filter-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;}
+        select, input[type=submit] { padding:10px; border-radius:5px; border:1px solid #ccc; font-size:14px;}
+        input[type=submit] { cursor:pointer; background:#007bff; color:#fff; border:none; transition: 0.3s; }
+        input[type=submit]:hover { background:#0056b3; }
+        table { width:100%; border-collapse:collapse; margin-top:10px; background:#fff;}
+        th, td { border:1px solid #ddd; padding:12px; text-align:center;}
+        th { background:#007bff; color:#fff;}
+        .action-button { display:flex; justify-content:center; gap:8px;}
+        .btn { padding:6px 12px; border:none; border-radius:4px; cursor:pointer; color:#fff; background:#007bff;}
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;}
+        .modal-content { background:#fff; width:300px; margin:15% auto; padding:20px; border-radius:10px; text-align:center;}
+        .modal-buttons { display:flex; justify-content:space-around; margin-top:15px;}
+        .yes-btn { background:#dc3545; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;}
+        .no-btn { background:#6c757d; color:#fff; padding:8px 15px; border:none; border-radius:5px; cursor:pointer;}
+    </style>
 <?php
 session_start();
-if(!isset($_SESSION['college_code'])) die("Session expired");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== "admin") {
+    header("Location: sign.html");
+    exit();
+}
 
 $college_code = $_SESSION['college_code'];
 $conn = new mysqli("localhost","root","","users");
-if($conn->connect_error) die("Connection failed: ".$conn->connect_error);
 
 
-// ===== HANDLE JSON REQUEST (SAVE) =====
-$raw = file_get_contents("php://input");
-$data = json_decode($raw, true);
+/* ===== LOAD CLASSES ===== */
+if (isset($_GET['get_classes_for_batch'])) {
 
-if(isset($data['action']) && $data['action'] == 'save_attendance'){
-    foreach($data['updates'] as $u){
-        $rollno = $u['rollno'];
-        $status = $u['status'];
+    $batch = $_GET['get_classes_for_batch'];
 
-        $check = $conn->prepare("SELECT id FROM attendance WHERE date=? AND batch_name=? AND class_name=? AND subject=? AND student_roll=? AND college_code=?");
-        $check->bind_param("ssssss",$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$college_code);
-        $check->execute();
-        $res = $check->get_result();
+    $stmt = $conn->prepare("SELECT DISTINCT classes FROM batches WHERE batch_name=? AND college_code=?");
+    $stmt->bind_param("ss", $batch, $college_code);
+    $stmt->execute();
+    $res = $stmt->get_result();
 
-        if($res->num_rows > 0){
-            $upd = $conn->prepare("UPDATE attendance SET status=? WHERE date=? AND batch_name=? AND class_name=? AND subject=? AND student_roll=? AND college_code=?");
-            $upd->bind_param("issssss",$status,$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$college_code);
-            $upd->execute();
-        } else {
-            $ins = $conn->prepare("INSERT INTO attendance(date,batch_name,class_name,subject,student_roll,status,college_code) VALUES(?,?,?,?,?,?,?)");
-            $ins->bind_param("sssssii",$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$status,$college_code);
-            $ins->execute();
-        }
+    echo '<option value="">-- Select Class --</option>';
+
+    while($row = $res->fetch_assoc()){
+        echo '<option value="'.$row['classes'].'">'.$row['classes'].'</option>';
     }
-    echo json_encode(["msg"=>"Saved"]);
+
     exit();
 }
 
-// ===== GET CLASSES =====
-if(isset($_GET['get_classes'])){
+
+/* ===== UPDATE ===== */
+if (isset($_POST['action']) && $_POST['action'] === 'update') {
+
+    $id = intval($_POST['id']);
+    $status = $_POST['status'];
+
+    $stmt = $conn->prepare("UPDATE attendance SET status=? WHERE id=? AND college_code=?");
+
+    if (!$stmt) {
+        echo "error";
+        exit();
+    }
+
+    $stmt->bind_param("sis", $status, $id, $college_code);
+
+    if ($stmt->execute()) {
+        echo "success";
+    } else {
+        echo "error";
+    }
+
+    exit();
+}
+
+
+/* ===== DELETE ===== */
+if (isset($_POST['action']) && $_POST['action'] === 'delete') {
+
+    $id = intval($_POST['id']);
+
+    $stmt = $conn->prepare("DELETE FROM attendance WHERE id=? AND college_code=?");
+
+    if (!$stmt) {
+        echo "error";
+        exit();
+    }
+
+    $stmt->bind_param("is", $id, $college_code);
+
+    if ($stmt->execute() && $stmt->affected_rows > 0) {
+        echo "success";
+    } else {
+        echo "error";
+    }
+
+    exit();
+}
+
+/* ===== LOAD STUDENTS ===== */
+if (isset($_GET['batch']) && isset($_GET['class'])) {
+
     $batch = $_GET['batch'];
-    $stmt = $conn->prepare("SELECT classes FROM batches WHERE batch_name=? AND college_code=?");
-    $stmt->bind_param("ss",$batch,$college_code);
+    $class = $_GET['class'];
+
+    $stmt = $conn->prepare("SELECT * FROM attendance WHERE batch_name=? AND class_name=? AND college_code=?");
+    $stmt->bind_param("sss", $batch, $class, $college_code);
     $stmt->execute();
     $res = $stmt->get_result();
+ if($res->num_rows > 0){
+    echo '<table id="studentTable">
+    <tr>
+        <th>Name</th>
+        <th>Roll</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>';
 
-    $classes = [];
     while($row = $res->fetch_assoc()){
-        $split = explode(',', $row['classes']);
-        foreach($split as $c){
-            $c = trim($c);
-            if($c) $classes[] = $c;
-        }
+        $id = $row['id'];
+
+        echo '<tr id="row-'.$id.'">
+            <td>'.$row['student_name'].'</td>
+            <td>'.$row['student_roll'].'</td>
+
+            <td>
+                <span id="status-text-'.$id.'">'.$row['status'].'</span>
+
+                <select id="status-input-'.$id.'" style="display:none;">
+                    <option value="Present" '.($row['status']=="Present"?"selected":"").'>Present</option>
+                    <option value="Absent" '.($row['status']=="Absent"?"selected":"").'>Absent</option>
+                </select>
+            </td>
+
+           <td>
+    <button class="btn" id="edit-btn-'.$id.'" onclick="editRow('.$id.')">Edit</button>
+
+    <button class="btn" id="save-btn-'.$id.'" onclick="saveRow('.$id.')" 
+        style="display:none;background:green;">Save</button>
+
+    <button class="btn" style="background:#dc3545;" 
+        onclick="deleteStudent('.$id.')">Delete</button>
+</td>
+        </tr>';
     }
-    echo json_encode($classes);
+
+    echo '</table>';
+
+}else {
+        echo "<p style='text-align:center; margin-top:20px;'>No students found for this batch and class.</p>";
+    }
+    $stmt->close();
+    $conn->close();
     exit();
 }
 
-// ===== GET STUDENTS =====
-if(isset($_GET['get_students'])){
-    $batch = $_GET['batch'];
-    $cls = $_GET['cls'];
 
-    $stmt = $conn->prepare("SELECT rollno,name FROM students WHERE batch_name=? AND class_name=? AND college_code=?");
-    $stmt->bind_param("sss",$batch,$cls,$college_code);
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    $students = [];
-    while($row = $res->fetch_assoc()){
-        $students[] = $row;
-    }
-
-    echo json_encode($students);
-    exit();
-}
-
-// ===== GET ATTENDANCE =====
-if(isset($_GET['get_attendance'])){
-    $stmt = $conn->prepare("SELECT rollno,status FROM attendance WHERE date=? AND batch=? AND class=? AND subject=? AND college_code=?");
-    $stmt->bind_param("sssss",$_GET['date'],$_GET['batch'],$_GET['cls'],$_GET['subject'],$college_code);
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    $att = [];
-    while($row = $res->fetch_assoc()){
-        $att[$row['rollno']] = $row['status'];
-    }
-
-    echo json_encode($att);
-    exit();
-}
-
-// ===== NORMAL PAGE LOAD BELOW =====
-header("Content-Type: text/html");
-
-// batches
-$batches = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE college_code='$college_code'");
-
-// subjects
-$subjects = $conn->query("SELECT DISTINCT subject_name FROM subjects WHERE college_code='$college_code'");
+/* ===== LOAD BATCHES ===== */
+$batch_result = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE college_code='$college_code'");
 ?>
 
 <!DOCTYPE html>
 <html>
-<head>
-<title>Attendance</title>
-<style>
-body{font-family:Arial;background:#f4f4f4;}
-.container{width:80%;margin:20px auto;background:#fff;padding:20px;border-radius:8px;}
-select,input{width:100%;padding:8px;margin:8px 0;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{border:1px solid #ccc;padding:8px;}
-.btn{padding:10px;background:blue;color:#fff;border:none;cursor:pointer;}
-</style>
-</head>
-
 <body>
-<div class="container">
-<h2>Attendance</h2>
 
-<input type="date" id="date">
+<h2>Student Management</h2>
+<div class="filter-container">
+<form id="batchForm">
+    <label>Batch:</label>
+    <select id="batchSelect" required>
+        <option value="">-- Select Batch --</option>
+        <?php while ($b = $batch_result->fetch_assoc()): ?>
+            <option value="<?= $b['batch_name'] ?>"><?= $b['batch_name'] ?></option>
+        <?php endwhile; ?>
+    </select>
 
-<select id="batch">
-<option value="">Batch</option>
-<?php while($b = $batches->fetch_assoc()): ?>
-<option><?= $b['batch_name'] ?></option>
-<?php endwhile; ?>
-</select>
+    <label>Class:</label>
+    <select id="classSelect" required>
+        <option value="">-- Select Batch First --</option>
+    </select>
 
-<select id="class"><option>Class</option></select>
-
-<select id="subject">
-<option value="">Subject</option>
-<?php while($s = $subjects->fetch_assoc()): ?>
-<option><?= $s['subject_name'] ?></option>
-<?php endwhile; ?>
-</select>
-
-<button class="btn" onclick="loadData()">Load</button>
-
-<div id="table"></div>
-</div>
+    <button type="submit" class="btn">Load Data</button>
+</form>
+        </div>
+<div id="data"></div>
 
 <script>
-document.getElementById('batch').onchange = function(){
-    let b = this.value;
-    fetch(`view_attendance.php?get_classes=1&batch=${b}`)
-    .then(r=>r.json())
-    .then(data=>{
-        let c = document.getElementById('class');
-        c.innerHTML='';
-        data.forEach(x=>{
-            let o=document.createElement('option');
-            o.textContent=x;
-            c.appendChild(o);
-        });
+
+// LOAD CLASSES
+document.getElementById("batchSelect").addEventListener("change", function () {
+
+    let batch = this.value;
+
+    fetch("?get_classes_for_batch=" + encodeURIComponent(batch))
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById("classSelect").innerHTML = data;
+    });
+});
+
+
+// LOAD STUDENTS
+document.getElementById("batchForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let batch = document.getElementById("batchSelect").value;
+    let cls = document.getElementById("classSelect").value;
+
+    fetch(`?batch=${batch}&class=${cls}`)
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById("data").innerHTML = data;
+    });
+});
+
+
+// EDIT
+function editRow(id){
+    document.getElementById(`status-text-${id}`).style.display="none";
+    document.getElementById(`status-input-${id}`).style.display="inline";
+
+    document.getElementById(`edit-btn-${id}`).style.display="none";
+    document.getElementById(`save-btn-${id}`).style.display="inline";
+}
+
+
+// SAVE
+function saveRow(id){
+
+    let status = document.getElementById(`status-input-${id}`).value;
+
+    let params = new URLSearchParams();
+    params.append("action","update");
+    params.append("id",id);
+    params.append("status",status);
+
+    fetch("",{
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:params.toString()
+    })
+    .then(res=>res.text())
+    .then(resp=>{
+        
+        console.log("SERVER:", resp);
+
+        if(resp.includes("success")){
+
+            document.getElementById(`status-text-${id}`).innerText = status;
+
+            document.getElementById(`status-text-${id}`).style.display="inline";
+            document.getElementById(`status-input-${id}`).style.display="none";
+
+            document.getElementById(`edit-btn-${id}`).style.display="inline";
+            document.getElementById(`save-btn-${id}`).style.display="none";
+
+        } else {
+            alert("Update failed!");
+        }
     });
 }
 
-function loadData(){
-    let date = document.getElementById('date').value;
-    let batch = document.getElementById('batch').value;
-    let cls = document.getElementById('class').value;
-    let subject = document.getElementById('subject').value;
+// DELETE
+function deleteStudent(id){
 
-    fetch(`view_attendance.php?get_students=1&batch=${batch}&cls=${cls}`)
-    .then(r=>r.json())
-    .then(students=>{
+    if(!confirm("Are you sure you want to delete?")) return;
 
-        fetch(`view_attendance.php?get_attendance=1&date=${date}&batch=${batch}&cls=${cls}&subject=${subject}`)
-        .then(r=>r.json())
-        .then(att=>{
+    fetch("",{
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:`action=delete&id=${id}`
+    })
+    .then(res=>res.text())
+    .then(resp=>{
 
-            let html = "<table><tr><th>Roll</th><th>Name</th><th>Present</th></tr>";
+        console.log("DELETE:", resp);
 
-            students.forEach(s=>{
-                let checked = att[s.rollno]==1 ? "checked":"";
-                html += `<tr>
-                    <td>${s.rollno}</td>
-                    <td>${s.name}</td>
-                    <td><input type="checkbox" data-roll="${s.rollno}" ${checked}></td>
-                </tr>`;
-            });
-
-            html += "</table><button onclick='save()'>Save</button>";
-            document.getElementById('table').innerHTML = html;
-        });
+        if(resp.includes("success")){
+            let row = document.getElementById("row-"+id);
+            if(row) row.remove();
+        } else {
+            alert("Delete failed!");
+        }
     });
 }
 
-function save(){
-    let updates=[];
-    document.querySelectorAll("input[type=checkbox]").forEach(cb=>{
-        updates.push({
-            rollno: cb.dataset.roll,
-            status: cb.checked ? 1 : 0
-        });
-    });
 
-    fetch('view_attendance.php',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-            action:'save_attendance',
-            date: document.getElementById('date').value,
-            batch: document.getElementById('batch').value,
-            cls: document.getElementById('class').value,
-            subject: document.getElementById('subject').value,
-            updates
-        })
-    }).then(r=>r.json()).then(d=>alert(d.msg));
-}
 </script>
 
 </body>

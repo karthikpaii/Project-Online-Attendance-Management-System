@@ -245,10 +245,10 @@ function logfunction()
  <!--Home Page Buttons---> 
     <div class="homec">
     <ul>
-        <li><a href="#" id="add-batc">Add Batch</a></li><br>
-        <li><a href="#" id="add-studen">Add Student</a></li>
-        <li><a href="#" id="view-studen">View Student</a></li>
-        <li><a href="#" id="mark-attendanc">Mark Attendance Student</a></li>     
+        <li><a href="#" onclick="loadContent('add-batch')"> Add Batch</a></li>
+        <li><a href="#" onclick="loadContent('add-student')">Add Student</a></li>
+        <li><a href="#" onclick="loadContent('view-student')">View Student</a></li>
+        <li><a href="#" onclick="loadContent('mark-attendance')"> Mark Attendance</a></li>     
     </ul> 
     </div> 
     </div>
@@ -261,7 +261,13 @@ function logfunction()
   {
     let content=document.getElementById("content-area");
 
-     if( type==="add-batch")
+    if( type==="Dashboard")
+     {
+        content.innerHTML=`<iframe src="dashboard.php" width="100%" height="800px" style="border:none;"></iframe> `;
+
+     }
+
+    else if( type==="add-batch")
      {
         content.innerHTML=`<iframe src="add_batch.php" width="100%" height="800px" style="border:none;"></iframe> `;
 
