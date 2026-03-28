@@ -41,7 +41,7 @@ if(!isset($_SESSION['college_code']))
             die("Connection Failed".$conn->connect_error);
         }
 
-$stmt=$conn->prepare("SELECT name, role, date_joined  FROM login WHERE college_code=?");
+$stmt=$conn->prepare("SELECT name, role, email, date_joined  FROM login WHERE college_code=?");
 $stmt->bind_param("s",$college_code);
 $stmt->execute();
 $result=$stmt->get_result();
@@ -53,6 +53,7 @@ if($result->num_rows>0)
                 <tr>
                     <th>Name</th>
                     <th>Role</th>
+                    <th>Email</th>
                     <th>Date Joined </td>
                 </tr>';
         while($row=$result->fetch_assoc())
@@ -60,6 +61,7 @@ if($result->num_rows>0)
                  echo "<tr> 
                  <td>" .htmlspecialchars($row['name']). "</td>
                  <td>" .htmlspecialchars($row['role']). "</td>
+                  <td>" .htmlspecialchars($row['email']). "</td>
                  <td>" .htmlspecialchars($row['date_joined']). "</td>
                  </tr>";
 
