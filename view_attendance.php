@@ -16,17 +16,17 @@ if(isset($data['action']) && $data['action'] == 'save_attendance'){
         $rollno = $u['rollno'];
         $status = $u['status'];
 
-        $check = $conn->prepare("SELECT id FROM attendance WHERE date=? AND batch=? AND class=? AND subject=? AND rollno=? AND college_code=?");
+        $check = $conn->prepare("SELECT id FROM attendance WHERE date=? AND batch_name=? AND class_name=? AND subject=? AND student_roll=? AND college_code=?");
         $check->bind_param("ssssss",$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$college_code);
         $check->execute();
         $res = $check->get_result();
 
         if($res->num_rows > 0){
-            $upd = $conn->prepare("UPDATE attendance SET status=? WHERE date=? AND batch=? AND class=? AND subject=? AND rollno=? AND college_code=?");
+            $upd = $conn->prepare("UPDATE attendance SET status=? WHERE date=? AND batch_name=? AND class_name=? AND subject=? AND student_roll=? AND college_code=?");
             $upd->bind_param("issssss",$status,$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$college_code);
             $upd->execute();
         } else {
-            $ins = $conn->prepare("INSERT INTO attendance(date,batch,class,subject,rollno,status,college_code) VALUES(?,?,?,?,?,?,?)");
+            $ins = $conn->prepare("INSERT INTO attendance(date,batch_name,class_name,subject,student_roll,status,college_code) VALUES(?,?,?,?,?,?,?)");
             $ins->bind_param("sssssii",$data['date'],$data['batch'],$data['cls'],$data['subject'],$rollno,$status,$college_code);
             $ins->execute();
         }

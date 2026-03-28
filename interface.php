@@ -233,7 +233,7 @@ function logfunction()
     <a href="#" onclick="loadContent('mark-attendance')"><i class="fas fa-check-square"></i> Mark Attendance</a>
     <a href="#" onclick="loadContent('view-attendance')"><i class="fas fa-check-square"></i> View Attendance</a>
     <a href="#" onclick="loadContent('admins')"><i class="fas fa-user-shield"></i>Admins</a>
-    <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i>AI Chat</a>
+      <a href="#" onclick="loadContent('AI')"><i class="fas fa-user-shield"></i>AI Chat</a>
     <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a>
     <p style="color:#e74c3c; margin-top: 20px;"><i class="fas fa-user-shield"></i> Welcome <?php echo $_SESSION['user']; ?></p>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i>  
@@ -292,6 +292,10 @@ function logfunction()
         <iframe src="view_attendance.php" width="100%" height="800px" style="border:none;"></iframe>
         `;
     }
+
+else if (type === "AI") {
+    window.open("https://chatgpt.com", "_blank");
+}
 
     else {
         content.innerHTML = "<h2>Dashboard</h2>";
