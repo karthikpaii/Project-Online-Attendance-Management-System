@@ -1,4 +1,4 @@
-<!-- <?php session_start(); ?> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +18,12 @@ html, body {
 }
 
 .navbar {
-    background:  #121125;
+    background:  #251511;
     font-family: cursive;
     padding-right: 15px;
     padding-left: 15px;
     padding-bottom: 10px;
+
    
 }
 
@@ -30,12 +31,16 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
 }
+
 
 .logo a {
     font-size: 35px;
     font-weight: 500;
     color: white;
+    text-align: center;
+   
 }
 
 li {
@@ -60,7 +65,7 @@ li a:hover {
     display: grid;
     height: 100%;
     place-items: center;
-    background: #121125;
+    background: #251511;
     padding-top:20px;
 }
 .wrapper {
@@ -160,7 +165,7 @@ form .field .icon {
 
 input:is(:focus) {
     border: 2px solid transparent;
-    background: linear-gradient(#121125, #121125) padding-box,
+    background: linear-gradient(#251511, #251511) padding-box,
         linear-gradient(45deg, blue, red) border-box;
     border-radius: 5px;
     transition: all 0.1s ease;
@@ -206,7 +211,7 @@ form input[type="submit"] {
     border: 0;
     outline: none;
     margin-top: 30px;
-    background: linear-gradient(45deg, blue, red);
+    background: linear-gradient(45deg, #251511, #34495e);
     color: #fff;
     font-size: 14px;
     cursor: pointer;
@@ -217,7 +222,7 @@ form input[type="submit"] {
 }
 
 form input[type="submit"]:hover {
-    background: linear-gradient(65deg, blue, red);
+    background: linear-gradient(65deg, rgb(202, 96, 20), rgb(234, 92, 15));
 }
 
 .signup-link {
@@ -293,28 +298,15 @@ form input[type="submit"]:hover {
 <body>
 <nav class="navbar">
         <div class="navdiv">
-            <div class="logo"><a href="#">Online Attendance Recorder</a></div>
-            <ul>
-                <li><a href="home.html">Home</a></li>
-                <li><a href="about1.html">About</a></li>
-                <li><a href="privacy1.html">Privacy Policy</a></li>
-                <li><a href="sign.html">Sign Up</a></li>
-            </ul>
+            <div class="logo" ><a href="#" style="text-align: center;">Online Attendance Viewer</a></div>
         </div>
     </nav>
 
 <div class="mid">
     <div class="wrapper">
-        <h2>Admin Login</h2>
+        <h2>Student Login</h2>
         <form action="login.php" method="POST">
             <div class="field email">
-
-                <div class="input-area">
-                <input type="text" id="codeF" placeholder="college code" name="collegecode" class="input-form" required>
-                   <i class="icon fas fa-key"></i>
-                </div>
-            <br>
-
                 <div class="input-area">
                 <input type="email" placeholder="Email Address" name="email" class="input-form" required>
                     <i class="icon fas fa-envelope"></i>
@@ -325,25 +317,16 @@ form input[type="submit"]:hover {
                 <div class="pass-link"><a href="#" onclick="showPopup()">Forgot Password</a></div>
                 <div class="input-area">
                     
-                <input type="password" id="passF" placeholder="Password" name="password" class="input-form" required>
+                <input type="date" id="passF" placeholder="date" name="password" class="input-form" required>
                     <i class="icon fas fa-lock"></i>
+
                 <span class="error-message"></span>
                 </div>
-                <br>
                 
             </div>
             <input type="submit" value="Login"> <br><br>
-              <div class="signup-link">Don't have an account? <a href="sign.html">Signup Now</a></div>
-        </form>
+           </form>
         
-
-    <div class="popup" id="resetPopup" style="display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -20%); background: black; padding: 20px; border: 1px solid white; border-radius: 10px; z-index: 1000;">
-    <span style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 18px;" onclick="closePopup()">✖</span>
-    <h3>Reset Password</h3>
-    <input type="email" id="resetEmail" placeholder="Enter Your Email"><br><br>
-    <input type="text" id="resetBdate" placeholder="Birth Your Correct BirthDate" onfocus="(this.type='date')" required><br><br>
-    <input type="password" id="resetNewPassword" placeholder="Enter New Password"><br><br>
-    <button onclick="resetPassword()">Submit</button>
     <p id="resetMessage"></p>
 </div>
 
@@ -351,72 +334,24 @@ form input[type="submit"]:hover {
     </div>
 
 <script>
+
+// No password regex for DOB
 const form = document.querySelector("form");
-
-const codeField = document.getElementById("codeF");
 const emailField = document.querySelector("input[name='email']");
-const passwordField = document.getElementById("passF");
-
-const errorBox = document.querySelector(".error-message");
 
 // SUBMIT VALIDATION
 form.onsubmit = (e) => {
-    let valid = true;
-
-    // College Code
-    if (codeField.value.trim() === "") {
-        showError("College code can't be blank");
-        valid = false;
+    if (!isValidEmail(emailField.value)) {
+        alert("Enter a valid email");
+        e.preventDefault();
     }
-
-    // Email
-    else if (!isValidEmail(emailField.value)) {
-        showError("Enter a valid email");
-        valid = false;
-    }
-
-    // Password
-    else if (!isValidPassword(passwordField.value)) {
-        showError("Password must be 8+ chars with A-Z, a-z, number & symbol");
-        valid = false;
-    }
-
-    else {
-        hideError();
-    }
-
-    if (!valid) e.preventDefault();
 };
 
-
-// LIVE VALIDATION
-passwordField.addEventListener("keyup", () => {
-    if (!isValidPassword(passwordField.value)) {
-        showError("Weak password");
-    } else {
-        hideError();
-    }
-});
-
-
-// HELPERS
-function showError(message) {
-    errorBox.textContent = message;
-    errorBox.style.display = "block";
-}
-
-function hideError() {
-    errorBox.textContent = "";
-    errorBox.style.display = "none";
-}
-
+// Simple email validation
 function isValidEmail(email) {
     return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
 }
 
-function isValidPassword(password) {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
-}
 </script>
 
 </div>
