@@ -194,9 +194,9 @@ h1
   <script>
    function loadContent(type)
   {
-    let content=document.getElementById("view-student");
+    let content=document.getElementById("content-area");
 
-    if( type==="Dashboard")
+    if( type==="view-student")
      {
         content.innerHTML=`<iframe src="studentpanel.php" width="100%" height="800px" style="border:none;"></iframe> `;
 
