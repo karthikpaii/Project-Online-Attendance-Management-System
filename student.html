@@ -305,10 +305,10 @@ form input[type="submit"]:hover {
 <div class="mid">
     <div class="wrapper">
         <h2>Student Login</h2>
-        <form action="login.php" method="POST">
+        <form action="student.php" method="POST">
             <div class="field email">
                 <div class="input-area">
-                <input type="email" placeholder="Email Address" name="email" class="input-form" required>
+                <input type="text" placeholder="Roll Number" name="roll" class="input-form" required>
                     <i class="icon fas fa-envelope"></i>
                 </div>
             </div>
@@ -337,20 +337,17 @@ form input[type="submit"]:hover {
 
 // No password regex for DOB
 const form = document.querySelector("form");
-const emailField = document.querySelector("input[name='email']");
+const rollField = document.querySelector("input[name='email']");
 
 // SUBMIT VALIDATION
 form.onsubmit = (e) => {
-    if (!isValidEmail(emailField.value)) {
-        alert("Enter a valid email");
+    if (!isValidEmail(rollField.value)) {
+        alert("Enter a RollNo email");
         e.preventDefault();
     }
 };
 
-// Simple email validation
-function isValidEmail(email) {
-    return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
-}
+
 
 </script>
 

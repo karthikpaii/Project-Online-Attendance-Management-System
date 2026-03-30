@@ -1,16 +1,21 @@
+
 <?php
+//STUDENT FORM
 session_start();
 
-// block access if not logged in
-if (!isset($_SESSION['user'])) {  //If user is NOT stored in session User is NOT logged in
-    header("Location: sign.html");
+if (!isset($_SESSION['user'])) {
+    header("Location: student.html");
     exit();
 }
 
-// prevent back button cache
-header("Cache-Control: no-cache, no-store, must-revalidate"); //Do NOT save this page in cache
+header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: 0");
+?>
+
+<?php
+$college_code = $_SESSION['college_code'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,17 +171,17 @@ h1
     <div class="navdiv">
       <div class="logo"><a href="#">Online Attendance Recorder</a></div>
       <ul>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <li><a href="log.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
       </ul>
     </div>
   </nav>
 
   <div class="sidebar">
     <h2><i class="fas fa-user"></i> Student</h2>
-    <a href="#" id="view-absent"><i class="fas fa-calendar-check"></i> View Your Attendance</a>
+  <a href="#" onclick="loadContent('view-student')"><i class="fas fa-users"></i> View Student</a>
     <p style="color:#e74c3c"><i class="fas fa-user"></i> Welcome <?php echo $_SESSION['user']; ?></p>
     <button class="Logout">
-     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i>
+     <a href="log.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i>
     </button>
   </div>
 
@@ -187,77 +192,22 @@ h1
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("view-absent").addEventListener("click", e => {
-        e.preventDefault();
-        fetch("student_panel.php")
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById("content-area").innerHTML = html;
-            initializeStudentPanel();
-          })
-          .catch(err => console.error("Error loading student panel:", err));
-      });
-    });
+   function loadContent(type)
+  {
+    let content=document.getElementById("view-student");
 
-    function initializeStudentPanel() {
-      const batchSel   = document.getElementById('batch');
-      const classSel   = document.getElementById('class');
-      const nameSel    = document.getElementById('studentName');
-      const pwdSection = document.getElementById('passwordSection');
-      const form       = document.getElementById('studentForm');
-      const resultDiv  = document.getElementById('result');
+    if( type==="Dashboard")
+     {
+        content.innerHTML=`<iframe src="studentpanel.php" width="100%" height="800px" style="border:none;"></iframe> `;
 
-      if (!batchSel || !classSel || !nameSel || !form) return;
-
-      // 1) batch → class
-      batchSel.addEventListener('change', () => {
-        fetch(`get_classess.php?batch=${encodeURIComponent(batchSel.value)}`)
-          .then(r => r.json())
-          .then(list => {
-            classSel.innerHTML = '<option value="">-- Select Class --</option>';
-            list.forEach(c => classSel.innerHTML += `<option>${c}</option>`);
-          });
-      });
-
-      // 2) class → students
-      classSel.addEventListener('change', () => {
-        fetch(`get_students.php?batch=${encodeURIComponent(batchSel.value)}&class=${encodeURIComponent(classSel.value)}`)
-          .then(r => r.json())
-          .then(list => {
-            nameSel.innerHTML = '<option value="">-- Select Student --</option>';
-            list.forEach(n => nameSel.innerHTML += `<option>${n}</option>`);
-          });
-      });
-
-      // 3) student → show password
-      nameSel.addEventListener('change', () => {
-        pwdSection.style.display = nameSel.value ? 'block' : 'none';
-      });
-
-      // 4) form submit → verify → attendance
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const data = new FormData(form);
-
-        fetch('verify_student.php', { method: 'POST', body: data })
-          .then(r => r.text())
-          .then(status => {
-            if (status.trim() !== 'success') {
-              throw new Error('Invalid name or password');
-            }
-            return fetch('get_attendance.php', { method: 'POST', body: data });
-          })
-          .then(r => r.text())
-          .then(html => {
-            resultDiv.innerHTML = html;
-          })
-          .catch(err => {
-            alert(err.message);
-            resultDiv.innerHTML = '';
-          });
-      });
+     }
+ 
+    else {
+        content.innerHTML = "<h2>Dashboard</h2>";
     }
+
+
+  }
   </script>
 </body>
 </html>
