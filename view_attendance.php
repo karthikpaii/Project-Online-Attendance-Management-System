@@ -114,6 +114,7 @@ if (isset($_GET['batch']) && isset($_GET['class'])) {
     <tr>
         <th>Name</th>
         <th>Roll</th>
+        <th>Date</th>
         <th>Status</th>
         <th>Action</th>
     </tr>';
@@ -124,7 +125,7 @@ if (isset($_GET['batch']) && isset($_GET['class'])) {
         echo '<tr id="row-'.$id.'">
             <td>'.$row['student_name'].'</td>
             <td>'.$row['student_roll'].'</td>
-
+            <td>'.$row['date'].'</td>
             <td>
                 <span id="status-text-'.$id.'">'.$row['status'].'</span>
 

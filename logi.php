@@ -296,8 +296,8 @@ form input[type="submit"]:hover {
             <div class="logo"><a href="#">Online Attendance Recorder</a></div>
             <ul>
                 <li><a href="home.html">Home</a></li>
-                <li><a href="about1.html">About</a></li>
-                <li><a href="privacy1.html">Privacy Policy</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
                 <li><a href="sign.html">Sign Up</a></li>
                 <li><a href="student.html">Student Login</a></li>
             </ul>
