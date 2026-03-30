@@ -1,4 +1,4 @@
-<!-- <?php session_start(); ?> -->
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -307,6 +307,12 @@ form input[type="submit"]:hover {
 <div class="mid">
     <div class="wrapper">
         <h2>Admin Login</h2>
+         <?php
+    if (isset($_SESSION['error'])) {
+        echo "<div class='error' style='color:red'>" . $_SESSION['error'] . "</div>";
+        unset($_SESSION['error']);
+    }
+    ?>
         <form action="login.php" method="POST">
             <div class="field email">
 
@@ -352,72 +358,72 @@ form input[type="submit"]:hover {
     </div>
 
 <script>
-const form = document.querySelector("form");
+// const form = document.querySelector("form");
 
-const codeField = document.getElementById("codeF");
-const emailField = document.querySelector("input[name='email']");
-const passwordField = document.getElementById("passF");
+// const codeField = document.getElementById("codeF");
+// const emailField = document.querySelector("input[name='email']");
+// const passwordField = document.getElementById("passF");
 
-const errorBox = document.querySelector(".error-message");
+// const errorBox = document.querySelector(".error-message");
 
-// SUBMIT VALIDATION
-form.onsubmit = (e) => {
-    let valid = true;
+// // SUBMIT VALIDATION
+// form.onsubmit = (e) => {
+//     let valid = true;
 
-    // College Code
-    if (codeField.value.trim() === "") {
-        showError("College code can't be blank");
-        valid = false;
-    }
+//     // College Code
+//     if (codeField.value.trim() === "") {
+//         showError("College code can't be blank");
+//         valid = false;
+//     }
 
-    // Email
-    else if (!isValidEmail(emailField.value)) {
-        showError("Enter a valid email");
-        valid = false;
-    }
+//     // Email
+//     else if (!isValidEmail(emailField.value)) {
+//         showError("Enter a valid email");
+//         valid = false;
+//     }
 
-    // Password
-    else if (!isValidPassword(passwordField.value)) {
-        showError("Password must be 8+ chars with A-Z, a-z, number & symbol");
-        valid = false;
-    }
+//     // Password
+//     else if (!isValidPassword(passwordField.value)) {
+//         showError("Password must be 8+ chars with A-Z, a-z, number & symbol");
+//         valid = false;
+//     }
 
-    else {
-        hideError();
-    }
+//     else {
+//         hideError();
+//     }
 
-    if (!valid) e.preventDefault();
-};
-
-
-// LIVE VALIDATION
-passwordField.addEventListener("keyup", () => {
-    if (!isValidPassword(passwordField.value)) {
-        showError("Weak password");
-    } else {
-        hideError();
-    }
-});
+//     if (!valid) e.preventDefault();
+// };
 
 
-// HELPERS
-function showError(message) {
-    errorBox.textContent = message;
-    errorBox.style.display = "block";
-}
+// // LIVE VALIDATION
+// passwordField.addEventListener("keyup", () => {
+//     if (!isValidPassword(passwordField.value)) {
+//         showError("Weak password");
+//     } else {
+//         hideError();
+//     }
+// });
 
-function hideError() {
-    errorBox.textContent = "";
-    errorBox.style.display = "none";
-}
 
-function isValidEmail(email) {
-    return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
-}
+// // HELPERS
+// function showError(message) {
+//     errorBox.textContent = message;
+//     errorBox.style.display = "block";
+// }
 
-function isValidPassword(password) {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
-}
+// function hideError() {
+//     errorBox.textContent = "";
+//     errorBox.style.display = "none";
+// }
+
+// function isValidEmail(email) {
+//     return /^[^ ]+@[^ ]+\.[a-z]{2,3}$/.test(email);
+// }
+
+// function isValidPassword(password) {
+//     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
+// }
 </script>
 
 </div>

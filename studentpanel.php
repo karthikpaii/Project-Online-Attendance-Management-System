@@ -115,10 +115,6 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-<button onclick="sendEmail()">Send Email</button>
-
-<form action="sendmail.php" method="post">
-    <button type="submit">Send Mail</button>
 </script>
 </body>
 </html>
