@@ -23,7 +23,7 @@ if(!$date || !$batch || !$subject){
     exit();
 }
 
-// ✅ Check subject exists
+
 $stmt = $conn->prepare("SELECT id FROM subjects WHERE subject_name=? AND college_code=?");
 $stmt->bind_param("ss",$subject,$college_code);
 $stmt->execute();
@@ -35,13 +35,13 @@ if($result->num_rows === 0){
     $insertSubj->execute();
 }
 
-// ✅ Fetch students
+
 $stmt = $conn->prepare("SELECT rollno, name, class_name FROM students WHERE batch_name=? AND college_code=?");
 $stmt->bind_param("ss",$batch,$college_code);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// ✅ Insert attendance
+
 while($row = $result->fetch_assoc()){
     $status = in_array($row['rollno'],$students) ? 'Present' : 'Absent';
 

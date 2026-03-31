@@ -269,7 +269,7 @@ form input[type="submit"]:hover {
 }
 .error-message {
     position: absolute;
-    top: 100%;      /* below input */
+    top: 100%;     
     left: 0;
     font-size: 12px;
     color: #ff4b5c;

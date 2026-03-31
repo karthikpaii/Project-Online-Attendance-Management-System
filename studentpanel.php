@@ -1,27 +1,26 @@
 <?php
 session_start();
 
-// ✅ CHECK LOGIN
+
 if (!isset($_SESSION['user'])) {
     header("Location: student.php");
     exit();
 }
 
-// ✅ GET SESSION DATA
+
 $college_code = $_SESSION['college_code'];
 $name = $_SESSION['user'];
 $roll = $_SESSION['roll'];
 $batch = $_SESSION['batch'];
 $class = $_SESSION['class'];
 
-// ✅ DB CONNECTION
 $conn = new mysqli("localhost", "root", "", "users");
 
 if ($conn->connect_error) {
     die("Connection Failed: " . $conn->connect_error);
 }
 
-// ✅ PREPARE QUERY
+//  PREPARE QUERY
 $stmt = $conn->prepare("SELECT student_roll, student_name, batch_name,class_name, subject, date, status FROM attendance WHERE student_roll=? AND college_code=?");
 $stmt->bind_param("ss", $roll, $college_code);
 $stmt->execute();
@@ -111,7 +110,7 @@ if ($result->num_rows > 0) {
     echo "<p style='text-align:center;'>No attendance records found.</p>";
 }
 
-// ✅ CLOSE
+
 $stmt->close();
 $conn->close();
 ?>

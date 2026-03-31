@@ -8,7 +8,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Only POST
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $college_code = strtolower(trim($_POST["collegecode"]));
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $stmt->store_result();
 
-    // User exists
+    
     if ($stmt->num_rows > 0) {
 
         $stmt->bind_result($name, $dbEmail, $dbPassword, $role, $dbCollege);
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $role;
             $_SESSION['college_code'] = $dbCollege;
 
-            // ✅ SUCCESS REDIRECT
+           
             header("Location: interface.php");
             exit();
 

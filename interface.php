@@ -209,22 +209,17 @@ h1 {
                 <li><a href="home2.php">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
-                <li onclick="logfunction()"> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
+                <li"> <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i> </li>
 
             </ul>
         </div>
 </nav>
 <script>
-function logfunction()
-{
-  var a = confirm("Do you want to logout?")
-   
-}
 </script>
-<!---side bar-->
+<
 <div class="body">
 <div class="sidebar">
-    <!--- Added icon from awesom font--->
+   
     <h2><i class="fas  fa-user-shield"></i> Admin</h2>
     <a href="#" onclick="loadContent('Dashboard')"><i class="fas fa-home"></i> Dashboard</a>
     <a href="#" onclick="loadContent('add-batch')"><i class="fas fa-layer-group"></i> Add Batch</a>
@@ -233,8 +228,8 @@ function logfunction()
     <a href="#" onclick="loadContent('mark-attendance')"><i class="fas fa-check-square"></i> Mark Attendance</a>
     <a href="#" onclick="loadContent('view-attendance')"><i class="fas fa-check-square"></i> View Attendance</a>
     <a href="#" onclick="loadContent('admins')"><i class="fas fa-user-shield"></i>Admins</a>
-      <a href="#" onclick="loadContent('AI')"><i class="fas fa-user-shield"></i>AI Chat</a>
-    <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a>
+      <!-- <a href="#" onclick="loadContent('AI')"><i class="fas fa-user-shield"></i>AI Chat</a>
+    <a href="#" id="send-message"><i class="fas fa-envelope"></i> Send Messages</a> -->
     <p style="color:#e74c3c; margin-top: 20px;"><i class="fas fa-user-shield"></i> Welcome <?php echo $_SESSION['user']; ?></p>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></i>  
 </div>

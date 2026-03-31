@@ -119,7 +119,7 @@ while($row = $subject_result->fetch_assoc()){
     <button type="button" class="btn" onclick="addSubject()">Add Subject</button>
 
     <div id="studentsTable">
-        <!-- Student table will appear here -->
+       
     </div>
 
     <input type="submit" class="btn" value="Save Attendance">
@@ -196,7 +196,7 @@ document.getElementById('class').addEventListener('change', function(){
     });
 });
 
-// ✅ HANDLE FORM SUBMIT (AJAX)
+
 document.querySelector("form").addEventListener("submit", function(e){
     e.preventDefault(); // stop reload
 
@@ -227,12 +227,12 @@ document.querySelector("form").addEventListener("submit", function(e){
 });
 
 
-// ✅ MESSAGE FUNCTION
+
 function showMessage(text, type){
     const msg = document.getElementById("message");
 
     msg.innerText = text;
-    msg.className = type; // success / error
+    msg.className = type; 
     msg.style.display = "block";
 
     setTimeout(()=>{

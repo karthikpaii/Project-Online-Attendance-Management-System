@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($dbName, $dbRoll, $dbDob, $dbBatch, $dbClass, $dbCollege);
         $stmt->fetch();
 
-        // ✅ FIXED DOB CHECK
+        
         if (date("Y-m", strtotime($dbDob)) === date("Y-m", strtotime($dob))) {
 
             $_SESSION['user'] = $dbName;
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['roll'] = $dbRoll;
             $_SESSION['college_code'] = $dbCollege;
 
-            header("Location: inter.php"); // ✅ go to correct page
+            header("Location: inter.php"); 
             exit();
 
         } else {

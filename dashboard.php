@@ -21,12 +21,13 @@ h1 {
   gap: 20px;
   padding: 20px;
 }
-.card, .table-container {
+.card {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   padding: 25px;
 }
+
 .card .details h3 {
   margin: 0;
   font-size: 1rem;
@@ -41,7 +42,7 @@ table {
   border-collapse: collapse;
 }
 th, td {
-  padding: 10px;
+  padding: 40px;
   text-align: left;
 }
 th {
@@ -75,7 +76,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// 🔐 AUTH CHECK
+
 if (!isset($_SESSION['user']) || $_SESSION['role'] !== "admin") {
     header("Location: sign.html");
     exit();
@@ -89,11 +90,7 @@ if($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// =============================
-// 📊 DATA QUERIES
-// =============================
 
-// Total students per class
 $studentsPerClass = $conn->query(
     "SELECT class_name, COUNT(*) AS total_students 
      FROM students 
@@ -101,7 +98,7 @@ $studentsPerClass = $conn->query(
      GROUP BY class_name"
 ) or die($conn->error);
 
-// Absences per class today
+
 $absentPerClassToday = $conn->query(
     "SELECT class_name, COUNT(*) AS absences_today
      FROM attendance
@@ -116,7 +113,7 @@ while($r = $absentPerClassToday->fetch_assoc()) {
     $absMap[$r['class_name']] = $r['absences_today'];
 }
 
-// Overall totals
+
 $overallStudents = $conn->query(
     "SELECT COUNT(*) AS total 
      FROM students 
@@ -131,7 +128,7 @@ $overallAbsences = $conn->query(
      AND college_code='$college_code'"
 )->fetch_assoc()['total'];
 
-// Low attendance (<75%)
+
 $lowAttendance = $conn->query(
     "SELECT s.rollno, s.name, s.batch_name, s.class_name,
         ROUND(
@@ -149,7 +146,7 @@ $lowAttendance = $conn->query(
 
 $lowCount = $lowAttendance->num_rows;
 
-// Trends (last 7 days)
+
 $trendQuery = $conn->query(
     "SELECT date, COUNT(*) AS total_absent
      FROM attendance
@@ -168,7 +165,6 @@ while($t = $trendQuery->fetch_assoc()) {
     $trendValues[] = $t['total_absent'];
 }
 
-// Top 5 absentees
 $topAbsentees = $conn->query(
     "SELECT s.rollno, s.name, s.class_name, COUNT(*) AS absents
      FROM students s
@@ -187,7 +183,6 @@ $topAbsentees = $conn->query(
 
 <div class="dashboard-container">
 
-  <!-- CARDS -->
   <div class="card">
     <div class="details">
       <h3>Total Students</h3>

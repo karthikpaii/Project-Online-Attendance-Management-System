@@ -3,14 +3,14 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // گرفتن input
+    
     $username = trim($_POST["Name"]);
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
     $date = trim($_POST["bdate"]);
     $college_code = trim($_POST["college_code"]);
 
-    // role fixed as admin
+   
     $role = "admin";
 
     // validation
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->num_rows > 0) {
 
         echo "<script>
-            alert('🛑 Email Already Registered! ❌');
+            alert(' Email Already Registered! ');
             window.location.href = 'sign.html';
         </script>";
         exit();

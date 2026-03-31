@@ -49,8 +49,8 @@ $college_code = $_SESSION['college_code'];
 <div class="logo"><a href="#">Online Attendace Recorder</a></div>
 <ul>
 <li><a href="#">Home</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="privacy.html">Privacy Policy</a></li>
+<li><a href="about1.html">About</a></li>
+<li><a href="privacy1.html">Privacy Policy</a></li>
 </ul>
 </div>
 </nav>

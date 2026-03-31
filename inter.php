@@ -1,6 +1,6 @@
 
 <?php
-//STUDENT FORM
+
 session_start();
 
 if (!isset($_SESSION['user'])) {
@@ -110,8 +110,8 @@ body, html {
 
 #content-area {
       position: absolute;
-      top: 75px;      /* below navbar */
-      left: 0px;    /* beside sidebar */
+      top: 75px;    
+      left: 0px;    
       right: 0;
       bottom: 0;
       padding: 20px;

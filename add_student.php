@@ -1,20 +1,19 @@
 <?php
 session_start();
 
-// ✅ SESSION CHECK
+
 if (!isset($_SESSION['college_code'])) {
     die("Session expired. Please login again.");
 }
 $college_code = $_SESSION['college_code'];
 
 
-// ✅ DB CONNECTION (ONLY ONCE)
 $conn = new mysqli("localhost", "root", "", "users");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// ✅ AJAX HANDLER (MUST BE AT TOP)
+
 if (isset($_GET['batch'])) {
     $batch = $_GET['batch'];
 
@@ -40,7 +39,6 @@ $batch_result->execute();
 $batch_result = $batch_result->get_result();
 
 
-// ✅ INSERT LOGIC
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $rollno = trim($_POST['rollno']);
@@ -61,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($result->num_rows > 0) {
     echo "<script>
         window.onload = function() {
-            showMessage('❌ Roll number already exists!', 'error');
+            showMessage(' Roll number already exists!', 'error');
         };
     </script>";
 } else {
@@ -84,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         echo "<script>
             window.onload = function() {
-                showMessage('⚠️ Error: ".$stmt->error."', 'error');
+                showMessage('Error: ".$stmt->error."', 'error');
             };
         </script>";
     }
@@ -95,13 +93,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $check->close();
 
 } else {
-    echo "<script>alert('⚠️ All fields are required.');</script>";
+    echo "<script>alert('All fields are required.');</script>";
 }
 }
 
 ?>
 
-<!-- ================= HTML START ================= -->
 
 <style>
 h2 {
@@ -125,7 +122,7 @@ h2 {
      .form-row {
         display: flex;
         gap: 20px;
-        flex-wrap: wrap; /* responsive */
+        flex-wrap: wrap; 
         margin-bottom: 15px;
     }
 
