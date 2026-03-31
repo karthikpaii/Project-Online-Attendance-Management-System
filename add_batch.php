@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             $_SESSION['success'] = "Batch added successfully!";
         } else {
-            $_SESSION['error'] = "Error adding batch!";
+            $_SESSION['error'] = "Error, Same Batch info Already Exits in DB!";
         }
 
         $stmt->close();
@@ -191,6 +191,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .error
     {
         background:#dc3545;
+        color:white;
+        text-align:center;
+        margin-top:10px;
     }
 
     .btn {

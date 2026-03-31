@@ -173,7 +173,7 @@ document.getElementById('class').addEventListener('change', function(){
 
         let table = document.createElement('table');
         let thead = document.createElement('thead');
-        thead.innerHTML='<tr><th><input type="checkbox" id="selectAll"> All</th><th>Roll No</th><th>Name</th><th>Batch</th><th>Class</th><th>Subject</th></tr>';
+        thead.innerHTML='<tr><th><input type="checkbox" id="selectAll"> All</th><th>Roll No</th><th>Name</th><th>Batch</th><th>Class</th></tr>';
         table.appendChild(thead);
         let tbody = document.createElement('tbody');
 
@@ -183,8 +183,7 @@ document.getElementById('class').addEventListener('change', function(){
                            <td>${student.rollno}</td>
                            <td>${student.name}</td>
                            <td>${batch}</td>
-                           <td>${cls}</td>
-                           <td><select name="subject_student[]"><option value="">${document.getElementById('subjectSelect').value}</option></select></td>`;
+                           <td>${cls}</td>`;
             tbody.appendChild(tr);
         });
         table.appendChild(tbody);
@@ -196,6 +195,50 @@ document.getElementById('class').addEventListener('change', function(){
         });
     });
 });
+
+// ✅ HANDLE FORM SUBMIT (AJAX)
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault(); // stop reload
+
+    const form = this;
+    const formData = new FormData(form);
+
+    fetch("save_attendance.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(data => {
+
+        if(data.trim() === "success"){
+            showMessage("Attendance marked successfully!", "success");
+
+            form.reset();
+            document.getElementById("studentsTable").innerHTML = "";
+
+        } else {
+            showMessage("Failed to save attendance!", "error");
+        }
+
+    })
+    .catch(() => {
+        showMessage("Server error!", "error");
+    });
+});
+
+
+// ✅ MESSAGE FUNCTION
+function showMessage(text, type){
+    const msg = document.getElementById("message");
+
+    msg.innerText = text;
+    msg.className = type; // success / error
+    msg.style.display = "block";
+
+    setTimeout(()=>{
+        msg.style.display = "none";
+    }, 3000);
+}
 </script>
 </body>
 </html>

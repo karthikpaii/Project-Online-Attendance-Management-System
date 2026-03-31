@@ -123,7 +123,7 @@ $batch_result = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE coll
     <title>View Students</title>
     <style>
         body { font-family: Arial, sans-serif; background: #e8f0f2; margin:0; padding:20px;}
-        h2 { text-align:center; color: #333;}
+        h1 { text-align:center; color: #333;}
         .filter-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;}
         select, input[type=submit] { padding:10px; border-radius:5px; border:1px solid #ccc; font-size:14px;}
         input[type=submit] { cursor:pointer; background:#007bff; color:#fff; border:none; transition: 0.3s; }
@@ -142,7 +142,7 @@ $batch_result = $conn->query("SELECT DISTINCT batch_name FROM batches WHERE coll
 </head>
 <body>
 
-<h2>Student Management Portal</h2>
+<h1>View Student List</h1>
 
 <div class="filter-container">
     <form id="batchForm" style="display: contents;">
